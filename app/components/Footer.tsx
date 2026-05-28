@@ -73,9 +73,17 @@ export default function Footer() {
                 </div>
 
                 <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 28, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-                    <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.78rem" }}>
-                        © {new Date().getFullYear()} Eliana Foundation. Tous droits réservés.
-                    </p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.78rem" }}>
+                            © {new Date().getFullYear()} Eliana Foundation. Tous droits réservés.
+                        </p>
+                        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.72rem" }}>
+                            Développé & designé par{" "}
+                            <a href="https://vibewebagency.fr" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none" }}>
+                                Vibe Web Agency
+                            </a>
+                        </p>
+                    </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, color: "rgba(255,255,255,0.25)" }}>
                         <span style={{ fontSize: "0.72rem" }}>Chaque enfant compte.</span>
                         <IconButterfly size={14} color="rgba(255,255,255,0.3)" />
