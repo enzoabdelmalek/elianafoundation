@@ -3,13 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconRainbow } from "./Icons";
+import { IconRainbowBrand, IconHeart } from "./Icons";
 
 const navLinks = [
-    { href: "/#mission", label: "Notre Mission" },
-    { href: "/#histoire", label: "Notre Histoire" },
-    { href: "/#actions", label: "Nos Actions" },
-    { href: "/#hommage", label: "Hommage" },
+    { href: "/",        label: "Accueil" },
+    { href: "/#mission", label: "Notre mission" },
+    { href: "/blog",    label: "Blog" },
     { href: "/contact", label: "Contact" },
 ];
 
@@ -18,69 +17,82 @@ export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
     const pathname = usePathname();
 
+    // Pages with dark (navy) hero — header starts transparent with white text
+    const isDark = pathname === "/" || pathname === "/don" || pathname.startsWith("/blog");
+
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
-        window.addEventListener("scroll", onScroll);
+        const onScroll = () => setScrolled(window.scrollY > 30);
+        window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
     useEffect(() => { setMenuOpen(false); }, [pathname]);
-
     useEffect(() => {
         document.body.style.overflow = menuOpen ? "hidden" : "";
         return () => { document.body.style.overflow = ""; };
     }, [menuOpen]);
 
+    const isActive = (href: string) => {
+        if (href === "/") return pathname === "/";
+        if (href.startsWith("/#")) return pathname === "/";
+        return pathname.startsWith(href);
+    };
+
+    const textColor = !scrolled && isDark ? "rgba(255,255,255,0.88)" : "var(--navy)";
+    const logoColor = !scrolled && isDark ? "#fff" : "var(--purple)";
+    const subColor  = !scrolled && isDark ? "rgba(255,255,255,0.45)" : "var(--muted)";
+
     return (
         <>
             <header style={{
                 position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-                background: scrolled ? "rgba(255,255,255,0.97)" : "transparent",
-                backdropFilter: scrolled ? "blur(12px)" : "none",
-                borderBottom: scrolled ? "1px solid #E5E7EB" : "none",
-                transition: "all 0.3s",
-                height: 72,
+                height: scrolled ? 74 : 92,
+                background: scrolled ? "rgba(255,251,245,.96)" : "transparent",
+                backdropFilter: scrolled ? "blur(18px)" : "none",
+                borderBottom: scrolled ? "1px solid var(--border)" : "none",
+                transition: "height 0.4s cubic-bezier(.16,1,.3,1), background 0.35s, border-color 0.35s, backdrop-filter 0.35s",
                 display: "flex", alignItems: "center",
             }}>
                 <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+
                     {/* Logo */}
-                    <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
-                        <div className="float">
-                            <IconRainbow size={32} />
+                    <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div className="float-slow" style={{ lineHeight: 0 }}>
+                            <IconRainbowBrand size={32} />
                         </div>
                         <div>
-                            <span className="font-script" style={{ fontSize: "1.4rem", color: "var(--purple)", lineHeight: 1 }}>Eliana</span>
-                            <span style={{ display: "block", fontSize: "0.58rem", letterSpacing: "0.22em", color: "var(--muted)", textTransform: "uppercase", marginTop: -2 }}>Foundation</span>
+                            <span className="font-script" style={{ fontSize: "1.4rem", color: logoColor, lineHeight: 1, display: "block", transition: "color 0.35s" }}>Eliana</span>
+                            <span style={{ fontSize: "0.52rem", letterSpacing: "0.26em", color: subColor, textTransform: "uppercase", display: "block", marginTop: -1, transition: "color 0.35s" }}>Foundation</span>
                         </div>
                     </Link>
 
                     {/* Desktop nav */}
-                    <nav style={{ display: "flex", alignItems: "center", gap: 32 }} className="hide-mobile">
+                    <nav style={{ display: "flex", alignItems: "center", gap: 36 }} className="hide-mobile">
                         {navLinks.map(l => (
-                            <Link key={l.href} href={l.href} className="nav-link">{l.label}</Link>
+                            <Link key={l.href} href={l.href}
+                                className={`nav-link${isActive(l.href) ? " nav-link-active" : ""}`}
+                                style={{ color: isActive(l.href) ? "var(--gold)" : textColor, transition: "color 0.35s" }}>
+                                {l.label}
+                            </Link>
                         ))}
-                        <Link href="/contact" className="btn-gold" style={{ padding: "10px 24px", fontSize: "0.8rem" }}>
-                            Soutenir la fondation
+                        <Link href="/don" className="btn btn-gold" style={{ padding: "10px 24px", fontSize: "0.8rem", gap: 7 }}>
+                            <IconHeart size={13} color="#fff" />
+                            Faire un don
                         </Link>
                     </nav>
 
-                    {/* Hamburger */}
-                    <button
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        aria-label="Menu"
-                        style={{ background: "none", border: "none", cursor: "pointer", flexDirection: "column", gap: 5, padding: 4 }}
+                    {/* Burger */}
+                    <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu"
                         className="show-mobile-flex"
-                    >
-                        {[0,1,2].map(i => (
+                        style={{ background: "none", border: "none", cursor: "pointer", flexDirection: "column", gap: 5, padding: 6 }}>
+                        {[0, 1, 2].map(i => (
                             <span key={i} style={{
-                                display: "block", width: 22, height: 2,
-                                background: "var(--purple)",
-                                borderRadius: 2,
-                                transition: "all 0.3s",
+                                display: "block", width: 24, height: 2,
+                                background: !scrolled && isDark ? "#fff" : "var(--navy)",
+                                borderRadius: 2, transition: "all 0.3s cubic-bezier(.16,1,.3,1)",
                                 transform: menuOpen
                                     ? i === 0 ? "translateY(7px) rotate(45deg)"
-                                    : i === 2 ? "translateY(-7px) rotate(-45deg)"
-                                    : "scaleX(0)"
+                                    : i === 2 ? "translateY(-7px) rotate(-45deg)" : "scaleX(0)"
                                     : "none",
                                 opacity: menuOpen && i === 1 ? 0 : 1,
                             }} />
@@ -89,40 +101,46 @@ export default function Header() {
                 </div>
             </header>
 
-            {/* Mobile menu */}
-            {menuOpen && (
-                <div style={{
-                    position: "fixed", inset: 0, zIndex: 40,
-                    background: "#fff",
-                    display: "flex", flexDirection: "column",
-                    alignItems: "center", justifyContent: "center",
-                    gap: 32,
-                    animation: "fadeIn 0.2s both",
-                }}>
-                    {navLinks.map(l => (
-                        <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
-                            style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display', serif", color: "var(--navy)", textDecoration: "none" }}>
-                            {l.label}
-                        </Link>
-                    ))}
-                    <Link href="/contact" className="btn-gold" onClick={() => setMenuOpen(false)}>
-                        Soutenir la fondation
-                    </Link>
+            {/* Mobile menu — full screen navy */}
+            <div style={{
+                position: "fixed", inset: 0, zIndex: 40,
+                background: "var(--navy-deep)",
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                gap: 40,
+                transform: menuOpen ? "translateY(0)" : "translateY(-100%)",
+                transition: "transform 0.45s cubic-bezier(.16,1,.3,1)",
+                pointerEvents: menuOpen ? "auto" : "none",
+            }}>
+                {/* Logo in menu */}
+                <div style={{ position: "absolute", top: 24, left: 24, display: "flex", alignItems: "center", gap: 10 }}>
+                    <IconRainbowBrand size={28} />
+                    <span className="font-script" style={{ color: "#fff", fontSize: "1.3rem" }}>Eliana</span>
                 </div>
-            )}
+
+                {navLinks.map((l, i) => (
+                    <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
+                        style={{
+                            fontFamily: "'Playfair Display', serif",
+                            fontSize: "clamp(1.6rem, 6vw, 2.2rem)",
+                            color: isActive(l.href) ? "var(--gold)" : "rgba(255,255,255,0.85)",
+                            transition: "color 0.2s",
+                            transitionDelay: menuOpen ? `${i * 0.06}s` : "0s",
+                        }}>
+                        {l.label}
+                    </Link>
+                ))}
+
+                <Link href="/don" onClick={() => setMenuOpen(false)}
+                    className="btn btn-gold"
+                    style={{ marginTop: 8, fontSize: "0.95rem", padding: "14px 40px", gap: 9 }}>
+                    <IconHeart size={16} color="#fff" />
+                    Faire un don
+                </Link>
+            </div>
 
             {/* Spacer */}
-            <div style={{ height: 72 }} />
-
-            <style>{`
-                @media (max-width: 768px) {
-                    .hide-mobile { display: none !important; }
-                    .show-mobile-flex { display: flex !important; }
-                }
-                @media (min-width: 769px) {
-                    .show-mobile-flex { display: none !important; }
-                }
-            `}</style>
+            <div style={{ height: 92 }} />
         </>
     );
 }

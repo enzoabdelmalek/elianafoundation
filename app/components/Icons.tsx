@@ -142,3 +142,56 @@ export function IconStar({ size = 16, color = "currentColor", style, className }
         </svg>
     );
 }
+
+export function IconPlus({ size = 20, color = "currentColor", style, className }: IconProps) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" style={{ ...base(size), ...style }} className={className}>
+            <path d="M12 5v14M5 12h14" />
+        </svg>
+    );
+}
+
+export function IconPhone({ size = 20, color = "currentColor", style, className }: IconProps) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ ...base(size), ...style }} className={className}>
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+    );
+}
+
+export function IconMapPin({ size = 20, color = "currentColor", style, className }: IconProps) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ ...base(size), ...style }} className={className}>
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+        </svg>
+    );
+}
+
+export function IconMail({ size = 20, color = "currentColor", style, className }: IconProps) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ ...base(size), ...style }} className={className}>
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+        </svg>
+    );
+}
+
+export function IconCheck({ size = 20, color = "currentColor", style, className }: IconProps) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ ...base(size), ...style }} className={className}>
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+    );
+}
+
+/* Brand rainbow : 3 arcs épais gold / pink / purple */
+export function IconRainbowBrand({ size = 24, style, className }: IconProps) {
+    return (
+        <svg viewBox="0 0 36 22" fill="none" style={{ ...base(size), ...style }} className={className}>
+            <path d="M2 20 Q18 2 34 20" stroke="#D97706" strokeWidth="3.5" strokeLinecap="round"/>
+            <path d="M5.5 20 Q18 6.5 30.5 20" stroke="#DB2777" strokeWidth="3.5" strokeLinecap="round"/>
+            <path d="M9 20 Q18 11 27 20" stroke="#5B21B6" strokeWidth="3.5" strokeLinecap="round"/>
+        </svg>
+    );
+}

@@ -1,95 +1,151 @@
+"use client";
+
 import Link from "next/link";
-import { IconRainbow, IconInstagram, IconFacebook, IconWhatsApp, IconButterfly } from "./Icons";
+import { IconRainbowBrand, IconInstagram, IconFacebook, IconWhatsApp, IconButterfly, IconHeart, IconMapPin, IconMail, IconPhone } from "./Icons";
+
+const navCol = [
+    { href: "/",         label: "Accueil" },
+    { href: "/#mission", label: "Notre mission" },
+    { href: "/#histoire",label: "Notre histoire" },
+    { href: "/#hommage", label: "Hommage" },
+    { href: "/blog",     label: "Blog" },
+];
+
+const actCol = [
+    { href: "/don",     label: "Faire un don" },
+    { href: "/#actions",label: "Nos actions" },
+    { href: "/contact", label: "Bénévolat" },
+    { href: "/contact", label: "Partenariats" },
+    { href: "/contact", label: "Devenez partenaire" },
+];
 
 export default function Footer() {
     return (
-        <footer style={{ background: "var(--navy)", color: "#fff", padding: "clamp(48px, 8vw, 80px) 0 32px" }}>
-            <style>{`
-                .footer-link { color: rgba(255,255,255,0.6); font-size: 0.88rem; text-decoration: none; transition: color 0.2s; }
-                .footer-link:hover { color: #fff; }
-                .footer-social { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); text-decoration: none; transition: all 0.2s; }
-                .footer-social:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
-            `}</style>
+        <footer style={{ background: "var(--navy-deep)", color: "#fff", padding: "clamp(64px, 10vw, 100px) 0 0" }}>
             <div className="container">
-                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "clamp(32px, 5vw, 64px)", marginBottom: 56 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1.4fr", gap: "clamp(32px, 4vw, 56px)", marginBottom: 64, alignItems: "start" }}>
 
                     {/* Brand */}
                     <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                            <IconRainbow size={32} />
+                        <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
+                            <IconRainbowBrand size={30} />
                             <div>
-                                <span className="font-script" style={{ fontSize: "1.5rem", color: "#fff", lineHeight: 1 }}>Eliana</span>
-                                <span style={{ display: "block", fontSize: "0.58rem", letterSpacing: "0.22em", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", marginTop: -2 }}>Foundation</span>
+                                <span className="font-script" style={{ fontSize: "1.5rem", color: "#fff", lineHeight: 1, display: "block" }}>Eliana</span>
+                                <span style={{ fontSize: "0.5rem", letterSpacing: "0.26em", color: "rgba(255,255,255,.4)", textTransform: "uppercase", marginTop: -1, display: "block" }}>Foundation</span>
                             </div>
-                        </div>
-                        <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem", lineHeight: 1.8, maxWidth: 320, marginBottom: 24 }}>
-                            Ensemble contre le cancer pédiatrique en République Démocratique du Congo. Pour nos enfants. Pour leur avenir. Pour la RDC.
+                        </Link>
+
+                        <p className="font-serif" style={{ fontStyle: "italic", color: "rgba(255,255,255,.65)", fontSize: "0.95rem", lineHeight: 1.85, maxWidth: 300, marginBottom: 28 }}>
+                            &ldquo;Que chaque enfant que nous aidons porte en lui la même lumière, la même force et les mêmes couleurs.&rdquo;
                         </p>
-                        <div style={{ display: "flex", gap: 12 }}>
-                            <a href="#" className="footer-social" aria-label="Instagram">
-                                <IconInstagram size={16} color="currentColor" />
-                            </a>
-                            <a href="#" className="footer-social" aria-label="Facebook">
-                                <IconFacebook size={16} color="currentColor" />
-                            </a>
-                            <a href="#" className="footer-social" aria-label="WhatsApp">
-                                <IconWhatsApp size={16} color="currentColor" />
-                            </a>
+
+                        <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+                            {[
+                                { href: "#", Icon: IconInstagram, label: "Instagram" },
+                                { href: "#", Icon: IconFacebook,  label: "Facebook" },
+                                { href: "#", Icon: IconWhatsApp,  label: "WhatsApp" },
+                            ].map(({ href, Icon, label }) => (
+                                <a key={label} href={href} aria-label={label} style={{
+                                    width: 40, height: 40, borderRadius: "50%",
+                                    border: "1px solid rgba(255,255,255,.18)",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    color: "rgba(255,255,255,.55)", transition: "all 0.2s",
+                                }}
+                                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,.6)"; (e.currentTarget as HTMLElement).style.color = "#fff"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,.08)"; }}
+                                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,.18)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,.55)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+                                    <Icon size={16} color="currentColor" />
+                                </a>
+                            ))}
                         </div>
-                        <p style={{ marginTop: 16, fontSize: "0.78rem", color: "rgba(255,255,255,0.4)" }}>@elianafoundation</p>
+                        <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,.28)" }}>@elianafoundation · Reconnue d&apos;utilité publique</p>
                     </div>
 
                     {/* Navigation */}
                     <div>
-                        <p style={{ fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>Navigation</p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                            {[
-                                { href: "/#mission", label: "Notre Mission" },
-                                { href: "/#histoire", label: "Notre Histoire" },
-                                { href: "/#actions", label: "Nos Actions" },
-                                { href: "/#hommage", label: "Hommage" },
-                                { href: "/contact", label: "Contact" },
-                            ].map(l => (
-                                <Link key={l.href} href={l.href} className="footer-link">{l.label}</Link>
+                        <p style={{ fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,.3)", marginBottom: 20, fontWeight: 600 }}>Navigation</p>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
+                            {navCol.map(l => (
+                                <Link key={l.href} href={l.href} style={{ color: "rgba(255,255,255,.55)", fontSize: "0.85rem", transition: "color 0.2s" }}
+                                    onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.55)")}>
+                                    {l.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Agir */}
+                    <div>
+                        <p style={{ fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,.3)", marginBottom: 20, fontWeight: 600 }}>Agir</p>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
+                            {actCol.map(l => (
+                                <Link key={l.label} href={l.href} style={{ color: "rgba(255,255,255,.55)", fontSize: "0.85rem", transition: "color 0.2s" }}
+                                    onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.55)")}>
+                                    {l.label}
+                                </Link>
                             ))}
                         </div>
                     </div>
 
                     {/* Contact */}
                     <div>
-                        <p style={{ fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>Contact</p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.88rem" }}>République Démocratique du Congo</p>
-                            <a href="mailto:contact@elianafoundation.org" className="footer-link">
-                                contact@elianafoundation.org
-                            </a>
+                        <p style={{ fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,.3)", marginBottom: 20, fontWeight: 600 }}>Contact</p>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 28 }}>
+                            <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                                <IconMapPin size={15} color="var(--gold)" style={{ marginTop: 3, flexShrink: 0 }} />
+                                <p style={{ color: "rgba(255,255,255,.55)", fontSize: "0.82rem", lineHeight: 1.65 }}>Kinshasa, République Démocratique du Congo</p>
+                            </div>
+                            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                                <IconMail size={15} color="var(--gold)" style={{ flexShrink: 0 }} />
+                                <a href="mailto:contact@elianafoundation.org" style={{ color: "rgba(255,255,255,.55)", fontSize: "0.82rem", transition: "color 0.2s" }}
+                                    onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.55)")}>
+                                    contact@elianafoundation.org
+                                </a>
+                            </div>
+                            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                                <IconPhone size={15} color="var(--gold)" style={{ flexShrink: 0 }} />
+                                <span style={{ color: "rgba(255,255,255,.55)", fontSize: "0.82rem" }}>+243 XXX XXX XXX</span>
+                            </div>
                         </div>
-                        <div style={{ marginTop: 28 }}>
-                            <Link href="/contact" className="btn-gold" style={{ padding: "10px 20px", fontSize: "0.8rem" }}>
-                                Nous soutenir
-                            </Link>
-                        </div>
+                        <Link href="/don" className="btn btn-gold" style={{ padding: "11px 22px", fontSize: "0.78rem", gap: 7 }}>
+                            <IconHeart size={13} color="#fff" />
+                            Faire un don
+                        </Link>
                     </div>
                 </div>
+            </div>
 
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 28, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.78rem" }}>
-                            © {new Date().getFullYear()} Eliana Foundation. Tous droits réservés.
+            {/* Bottom bar */}
+            <div style={{ borderTop: "1px solid rgba(255,255,255,.08)", padding: "24px 0" }}>
+                <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+                    <div>
+                        <p style={{ color: "rgba(255,255,255,.28)", fontSize: "0.72rem" }}>
+                            © {new Date().getFullYear()} Fondation Eliana. Tous droits réservés.
                         </p>
-                        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.72rem" }}>
+                        <p style={{ color: "rgba(255,255,255,.16)", fontSize: "0.68rem", marginTop: 4 }}>
                             Développé & designé par{" "}
-                            <a href="https://vibewebagency.fr" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none" }}>
+                            <a href="https://vibewebagency.fr" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,.28)" }}>
                                 Vibe Web Agency
                             </a>
                         </p>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, color: "rgba(255,255,255,0.25)" }}>
-                        <span style={{ fontSize: "0.72rem" }}>Chaque enfant compte.</span>
-                        <IconButterfly size={14} color="rgba(255,255,255,0.3)" />
+                    <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                        <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,.2)" }}>Pour nos enfants, pour leur avenir.</span>
+                        <IconButterfly size={13} color="rgba(255,255,255,.22)" />
                     </div>
                 </div>
             </div>
+
+            <style>{`
+                @media (max-width: 860px) {
+                    footer .container > div:first-child { grid-template-columns: 1fr 1fr !important; }
+                }
+                @media (max-width: 560px) {
+                    footer .container > div:first-child { grid-template-columns: 1fr !important; }
+                }
+            `}</style>
         </footer>
     );
 }

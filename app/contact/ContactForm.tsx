@@ -15,8 +15,17 @@ export default function ContactForm() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setStatus("sending");
-        await new Promise(r => setTimeout(r, 1200));
-        setStatus("success");
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+            if (!res.ok) throw new Error();
+            setStatus("success");
+        } catch {
+            setStatus("error");
+        }
     }
 
     if (status === "success") {
@@ -132,6 +141,13 @@ export default function ContactForm() {
                     style={{ resize: "vertical", minHeight: 140 }}
                 />
             </div>
+
+            {status === "error" && (
+                <p style={{ fontSize: "0.85rem", color: "#DC2626", background: "#FEF2F2", padding: "12px 16px", borderRadius: 8, border: "1px solid #FECACA" }}>
+                    Une erreur est survenue. Veuillez réessayer ou nous contacter directement à{" "}
+                    <a href="mailto:contact@elianafoundation.org" style={{ color: "#DC2626" }}>contact@elianafoundation.org</a>.
+                </p>
+            )}
 
             <button
                 type="submit"
