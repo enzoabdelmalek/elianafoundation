@@ -2,6 +2,17 @@ import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { IconArrow, IconButterfly, IconHeart } from "../components/Icons";
 
+interface BlogPost {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt?: string;
+    category?: string;
+    cover_image?: string;
+    published_at: string;
+    author?: string;
+}
+
 async function getPosts() {
     try {
         const supabase = createClient(
@@ -73,7 +84,7 @@ export default async function BlogPage() {
                         <section style={{ background: "var(--navy-deep)" }}>
                             <div className="container">
                                 <Link href={`/blog/${featured.slug}`} style={{ display: "block" }}>
-                                    <div style={{
+                                    <div className="grid-featured" style={{
                                         display: "grid", gridTemplateColumns: "1fr 1fr",
                                         gap: "clamp(40px, 6vw, 80px)", alignItems: "center",
                                         padding: "clamp(48px, 7vw, 88px) 0",
@@ -121,7 +132,7 @@ export default async function BlogPage() {
                                     </div>
                                 </div>
                                 <div className="grid-3">
-                                    {rest.map((post: any) => (
+                                    {rest.map((post: BlogPost) => (
                                         <Link key={post.id} href={`/blog/${post.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
                                             <div className="blog-card-img photo-slot">
                                                 {post.cover_image && <img src={post.cover_image} alt={post.title} />}

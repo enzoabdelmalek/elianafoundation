@@ -139,8 +139,8 @@ export default function Header() {
                 </Link>
             </div>
 
-            {/* Spacer */}
-            <div style={{ height: 92 }} />
+            {/* Spacer — matches header height to avoid gap on scroll */}
+            <div style={{ height: scrolled ? 74 : 92, transition: "height 0.4s cubic-bezier(.16,1,.3,1)" }} />
         </>
     );
 }

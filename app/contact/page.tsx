@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { IconArrow, IconMapPin, IconMail, IconPhone, IconPlus, IconHeart, IconButterfly, IconUsers } from "../components/Icons";
 
 const FAQ = [
@@ -46,12 +47,28 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 export default function ContactPage() {
-    const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-    const [sent, setSent]  = useState(false);
+    const [form, setForm]     = useState({ name: "", email: "", subject: "", message: "" });
+    const [sent, setSent]     = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError]   = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSent(true);
+        setLoading(true);
+        setError("");
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+            if (!res.ok) throw new Error();
+            setSent(true);
+        } catch {
+            setError("Une erreur est survenue. Veuillez réessayer.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -75,7 +92,7 @@ export default function ContactPage() {
             {/* ── FORMULAIRE + SIDEBAR ── */}
             <section className="section" style={{ background: "#fff" }}>
                 <div className="container">
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "clamp(40px, 6vw, 72px)", alignItems: "start" }}>
+                    <div className="grid-contact-form" style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "clamp(40px, 6vw, 72px)", alignItems: "start" }}>
 
                         {/* Formulaire */}
                         <div>
@@ -128,16 +145,19 @@ export default function ContactPage() {
                                             onBlur={e => e.target.style.borderColor = "var(--border)"} />
                                     </div>
 
-                                    <button type="submit" className="btn btn-gold" style={{ alignSelf: "flex-start" }}>
-                                        Envoyer le message
-                                        <IconArrow size={14} color="#fff" />
+                                    {error && (
+                                        <p style={{ fontSize: "0.82rem", color: "var(--pink)", lineHeight: 1.6 }}>{error}</p>
+                                    )}
+                                    <button type="submit" disabled={loading} className="btn btn-gold" style={{ alignSelf: "flex-start", opacity: loading ? 0.7 : 1 }}>
+                                        {loading ? "Envoi en cours…" : "Envoyer le message"}
+                                        {!loading && <IconArrow size={14} color="#fff" />}
                                     </button>
                                 </form>
                             )}
                         </div>
 
                         {/* Sidebar */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: 20, position: "sticky", top: 100 }}>
+                        <div className="sidebar-sticky" style={{ display: "flex", flexDirection: "column", gap: 20, position: "sticky", top: 100 }}>
                             {/* Coordonnées */}
                             <div style={{ padding: "28px", borderRadius: 20, background: "var(--navy-deep)", color: "#fff" }}>
                                 <h3 style={{ fontSize: "1rem", marginBottom: 22, fontFamily: "'Playfair Display', serif" }}>Nous trouver</h3>
@@ -183,10 +203,10 @@ export default function ContactPage() {
                                 <p style={{ fontSize: "0.82rem", color: "var(--gold-dark)", lineHeight: 1.7, marginBottom: 12 }}>
                                     Soutenir financièrement la fondation
                                 </p>
-                                <a href="/don" className="btn btn-gold" style={{ display: "inline-flex", width: "100%", justifyContent: "center", fontSize: "0.82rem", padding: "11px 20px" }}>
+                                <Link href="/don" className="btn btn-gold" style={{ display: "inline-flex", width: "100%", justifyContent: "center", fontSize: "0.82rem", padding: "11px 20px" }}>
                                     <IconHeart size={13} color="#fff" />
                                     Faire un don
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -196,8 +216,8 @@ export default function ContactPage() {
             {/* ── FAQ ── */}
             <section className="section" style={{ background: "var(--beige)" }}>
                 <div className="container">
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "clamp(40px, 6vw, 80px)", alignItems: "start" }}>
-                        <div style={{ position: "sticky", top: 110 }}>
+                    <div className="grid-contact-faq" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "clamp(40px, 6vw, 80px)", alignItems: "start" }}>
+                        <div className="faq-sticky" style={{ position: "sticky", top: 110 }}>
                             <span className="section-label" data-sr>FAQ</span>
                             <h2 data-sr style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "var(--navy)", marginBottom: 16 }}>
                                 Questions<br />

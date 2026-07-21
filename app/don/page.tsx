@@ -62,7 +62,7 @@ export default function DonPage() {
             {/* ── FORM (chevauche le hero) ── */}
             <section style={{ background: "var(--beige)", paddingBottom: "clamp(64px, 10vw, 100px)" }}>
                 <div className="container">
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "clamp(32px, 5vw, 56px)", alignItems: "start", marginTop: -60 }}>
+                    <div className="grid-don-form" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "clamp(32px, 5vw, 56px)", alignItems: "start", marginTop: -60 }}>
 
                         {/* Card formulaire */}
                         <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 32px 80px rgba(15,37,64,.15)", overflow: "hidden" }}>
@@ -90,7 +90,7 @@ export default function DonPage() {
                                             {tab === "mensuel" ? "Votre don régulier nous permet de planifier et pérenniser nos actions sur le terrain." : "Votre don unique contribue directement à nos programmes en République Démocratique du Congo."}
                                         </p>
 
-                                        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 14 }}>
+                                        <div className="grid-amount-btn" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 14 }}>
                                             {amounts.map(a => (
                                                 <button key={a} onClick={() => handleSelect(a)}
                                                     className={`amount-btn${amount === a && !custom ? " active" : ""}`}>
@@ -139,14 +139,14 @@ export default function DonPage() {
                                             <span style={{ fontSize: "0.82rem", color: "var(--gold-dark)" }}>Votre don</span>
                                             <span style={{ fontWeight: 800, fontSize: "1.3rem", color: "var(--gold)", fontFamily: "'Playfair Display', serif" }}>{activeAmount}${tab === "mensuel" ? "/mois" : ""}</span>
                                         </div>
-                                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+                                        <div className="grid-name-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
                                             {[
                                                 { id: "firstName", label: "Prénom", type: "text" },
                                                 { id: "lastName",  label: "Nom",    type: "text" },
                                             ].map(({ id, label, type }) => (
                                                 <div key={id}>
                                                     <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, color: "var(--navy)", marginBottom: 6 }}>{label}</label>
-                                                    <input type={type} required value={(form as any)[id]} onChange={e => setForm(f => ({ ...f, [id]: e.target.value }))}
+                                                    <input type={type} required value={form[id as keyof typeof form]} onChange={e => setForm(f => ({ ...f, [id]: e.target.value }))}
                                                         style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "2px solid var(--border)", fontSize: "0.88rem", outline: "none", transition: "border 0.2s" }}
                                                         onFocus={e => e.target.style.borderColor = "var(--gold)"}
                                                         onBlur={e => e.target.style.borderColor = "var(--border)"} />
@@ -180,10 +180,10 @@ export default function DonPage() {
                         </div>
 
                         {/* Sidebar */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: 20, paddingTop: 60 }}>
+                        <div className="sidebar-don-pt" style={{ display: "flex", flexDirection: "column", gap: 20, paddingTop: 60 }}>
                             {/* Photo */}
                             <div className="photo-slot" style={{ borderRadius: 20, overflow: "hidden", aspectRatio: "4/3" }}>
-                                <img src="https://picsum.photos/seed/eliana-don/600/450" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                <img src="https://picsum.photos/seed/eliana-don/600/450" alt="Impact de vos dons en RDC" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             </div>
 
                             {/* Pourquoi donner */}

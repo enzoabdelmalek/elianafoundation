@@ -234,10 +234,22 @@ button { font-family: inherit; }
     .hide-mobile { display: none !important; }
     .show-mobile { display: block; }
     .show-mobile-flex { display: flex; }
+
+    /* Inline-style grids that need mobile override */
+    .grid-hommage      { grid-template-columns: 1fr !important; }
+    .grid-featured     { grid-template-columns: 1fr !important; }
+    .grid-don-form     { grid-template-columns: 1fr !important; margin-top: 0 !important; padding-top: clamp(32px, 5vw, 48px); }
+    .grid-contact-form { grid-template-columns: 1fr !important; }
+    .grid-contact-faq  { grid-template-columns: 1fr !important; }
+    .sidebar-sticky    { position: static !important; }
+    .sidebar-don-pt    { padding-top: 0 !important; }
+    .faq-sticky        { position: static !important; }
 }
 @media (max-width: 560px) {
     .grid-3 { grid-template-columns: 1fr; }
     .grid-4 { grid-template-columns: 1fr; }
+    .grid-amount-btn   { grid-template-columns: 1fr 1fr !important; }
+    .grid-name-row     { grid-template-columns: 1fr !important; }
 }
 @media (min-width: 861px) {
     .show-mobile { display: none !important; }

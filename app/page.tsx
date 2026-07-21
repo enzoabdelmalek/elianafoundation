@@ -5,6 +5,16 @@ import {
     IconUsers, IconMegaphone, IconCross, IconCheck, IconRainbowBrand,
 } from "./components/Icons";
 
+interface BlogPost {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt?: string;
+    category?: string;
+    cover_image?: string;
+    published_at: string;
+}
+
 /* ─── Data ─── */
 const PILLARS = [
     { Icon: IconSearch,    bg: "var(--gold-soft)",   border: "var(--gold-light)",   color: "var(--gold)",   title: "Diagnostic précoce",    desc: "Favoriser l'accès à un diagnostic précoce et fiable pour augmenter les chances de guérison." },
@@ -119,7 +129,7 @@ export default async function HomePage() {
                         {/* Right — photo + stat card */}
                         <div className="h-anim h-a5 hide-mobile" style={{ position: "relative" }}>
                             <div className="photo-slot" style={{ aspectRatio: "4/5", borderRadius: 24, overflow: "hidden", boxShadow: "0 40px 80px rgba(0,0,0,.4)" }}>
-                                <img src="https://picsum.photos/seed/eliana-hero/800/1000" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                <img src="https://picsum.photos/seed/eliana-hero/800/1000" alt="Enfants soutenus par la Fondation Eliana" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             </div>
                             {/* Floating stat card */}
                             <div style={{
@@ -188,7 +198,7 @@ export default async function HomePage() {
                         {/* Photo */}
                         <div data-sr>
                             <div className="photo-slot" style={{ aspectRatio: "4/5", borderRadius: 24, overflow: "hidden", boxShadow: "0 32px 72px rgba(30,58,95,.12)" }}>
-                                <img src="https://picsum.photos/seed/eliana-histoire/800/1000" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                <img src="https://picsum.photos/seed/eliana-histoire/800/1000" alt="Histoire de la Fondation Eliana" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             </div>
                         </div>
 
@@ -303,12 +313,12 @@ export default async function HomePage() {
                 <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(ellipse 50% 60% at 15% 50%, rgba(217,119,6,.1) 0%, transparent 55%), radial-gradient(ellipse 40% 50% at 85% 30%, rgba(91,33,182,.15) 0%, transparent 55%)", pointerEvents: "none" }} />
 
                 <div className="container" style={{ position: "relative", zIndex: 1 }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "480px 1fr", gap: "clamp(48px, 7vw, 96px)", alignItems: "center" }}>
+                    <div className="grid-hommage" style={{ display: "grid", gridTemplateColumns: "480px 1fr", gap: "clamp(48px, 7vw, 96px)", alignItems: "center" }}>
 
                         {/* Photo */}
                         <div data-sr style={{ position: "relative" }}>
                             <div className="photo-slot" style={{ aspectRatio: "3/4", borderRadius: 24, overflow: "hidden", boxShadow: "0 40px 80px rgba(0,0,0,.4)" }}>
-                                <img src="https://picsum.photos/seed/eliana-hommage/700/900" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                <img src="https://picsum.photos/seed/eliana-hommage/700/900" alt="Hommage à Eliana" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 45%, rgba(15,37,64,.6) 100%)" }} />
                             </div>
                             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 20 }}>
@@ -359,7 +369,7 @@ export default async function HomePage() {
                             </Link>
                         </div>
                         <div className="grid-3">
-                            {posts.map((post: any) => (
+                            {posts.map((post: BlogPost) => (
                                 <Link key={post.id} href={`/blog/${post.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
                                     <div className="blog-card-img photo-slot">
                                         {post.cover_image && <img src={post.cover_image} alt={post.title} />}

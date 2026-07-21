@@ -1,7 +1,21 @@
+import { Fragment } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { IconArrow, IconHeart, IconButterfly } from "../../components/Icons";
+
+interface BlogPost {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt?: string;
+    category?: string;
+    cover_image?: string;
+    published_at: string;
+    author?: string;
+    content?: string;
+    quote?: string;
+}
 
 async function getPost(slug: string) {
     const supabase = createClient(
@@ -123,16 +137,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <article style={{ background: "#fff", paddingBottom: 80 }}>
                 <div style={{ maxWidth: 740, margin: "0 auto", padding: "clamp(40px, 6vw, 72px) clamp(20px, 5vw, 72px) 0" }}>
                     <div style={{ lineHeight: 2, color: "var(--fg)", fontSize: "17.5px" }}>
-                        {paragraphs.map((block, i) => {
+                        {paragraphs.map((block: string, i: number) => {
                             const isHeading = block.startsWith("**") && block.endsWith("**") && !block.slice(2, -2).includes("**");
 
-                            // Insert quote block before quoteIndex paragraph
                             const quoteEl = (quoteText && i === quoteIndex) ? (
                                 <blockquote key={`quote-${i}`} style={{
-                                    margin: "40px 0",
-                                    padding: "28px 36px",
-                                    background: "var(--beige)",
-                                    borderLeft: "4px solid var(--gold)",
+                                    margin: "40px 0", padding: "28px 36px",
+                                    background: "var(--beige)", borderLeft: "4px solid var(--gold)",
                                     borderRadius: "0 16px 16px 0",
                                 }}>
                                     <p className="font-serif" style={{ fontStyle: "italic", fontSize: "1.15rem", color: "var(--navy)", lineHeight: 1.8 }}>{quoteText}</p>
@@ -145,7 +156,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                 </h2>
                             ) : (
                                 <p key={i} style={{ marginBottom: 26, lineHeight: 2 }}>
-                                    {block.split(/(\*\*[^*]+\*\*)/).map((chunk, j) =>
+                                    {block.split(/(\*\*[^*]+\*\*)/).map((chunk: string, j: number) =>
                                         chunk.startsWith("**") && chunk.endsWith("**")
                                             ? <strong key={j} style={{ fontWeight: 700, color: "var(--navy)" }}>{chunk.slice(2, -2)}</strong>
                                             : chunk
@@ -153,7 +164,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                 </p>
                             );
 
-                            return quoteEl ? [quoteEl, el] : el;
+                            return quoteEl ? <Fragment key={i}>{quoteEl}{el}</Fragment> : el;
                         })}
                     </div>
 
@@ -192,7 +203,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                             </Link>
                         </div>
                         <div className="grid-3">
-                            {related.map((p: any) => (
+                            {related.map((p: BlogPost) => (
                                 <Link key={p.id} href={`/blog/${p.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
                                     <div className="blog-card-img photo-slot">
                                         {p.cover_image && <img src={p.cover_image} alt={p.title} />}
