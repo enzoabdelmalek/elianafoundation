@@ -236,7 +236,10 @@ button { font-family: inherit; }
     .show-mobile-flex { display: flex; }
 
     /* Inline-style grids that need mobile override */
+    .grid-hero         { grid-template-columns: 1fr !important; }
     .grid-hommage      { grid-template-columns: 1fr !important; }
+    .stat-border-r     { border-right: none !important; }
+    .footer-grid-mb    { margin-bottom: clamp(32px, 6vw, 64px) !important; }
     .grid-featured     { grid-template-columns: 1fr !important; }
     .grid-don-form     { grid-template-columns: 1fr !important; margin-top: 0 !important; padding-top: clamp(32px, 5vw, 48px); }
     .grid-contact-form { grid-template-columns: 1fr !important; }

@@ -142,7 +142,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
                             const quoteEl = (quoteText && i === quoteIndex) ? (
                                 <blockquote key={`quote-${i}`} style={{
-                                    margin: "40px 0", padding: "28px 36px",
+                                    margin: "40px 0", padding: "clamp(16px,4vw,28px) clamp(16px,4vw,36px)",
                                     background: "var(--beige)", borderLeft: "4px solid var(--gold)",
                                     borderRadius: "0 16px 16px 0",
                                 }}>
@@ -181,7 +181,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                 Chaque don contribue à améliorer la prise en charge du cancer pédiatrique en RDC.
                             </p>
                         </div>
-                        <Link href="/don" className="btn btn-gold" style={{ whiteSpace: "nowrap" }}>
+                        <Link href="/don" className="btn btn-gold">
                             <IconHeart size={14} color="#fff" />
                             Faire un don
                         </Link>

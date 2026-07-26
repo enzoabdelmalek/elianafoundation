@@ -97,7 +97,7 @@ export default function ContactPage() {
                         {/* Formulaire */}
                         <div>
                             {sent ? (
-                                <div style={{ padding: "56px 48px", background: "var(--beige)", borderRadius: 24, textAlign: "center" }}>
+                                <div style={{ padding: "clamp(32px,5vw,56px) clamp(20px,5vw,48px)", background: "var(--beige)", borderRadius: 24, textAlign: "center" }}>
                                     <div className="float" style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
                                         <IconButterfly size={64} color="var(--purple)" />
                                     </div>
@@ -106,7 +106,7 @@ export default function ContactPage() {
                                 </div>
                             ) : (
                                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                                    <div className="grid-name-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                                         <div>
                                             <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, color: "var(--navy)", marginBottom: 7 }}>Nom complet</label>
                                             <input type="text" required placeholder="Prénom Nom" value={form.name}

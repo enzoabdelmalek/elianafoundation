@@ -23,7 +23,7 @@ export default function Footer() {
     return (
         <footer style={{ background: "var(--navy-deep)", color: "#fff", padding: "clamp(64px, 10vw, 100px) 0 0" }}>
             <div className="container">
-                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1.4fr", gap: "clamp(32px, 4vw, 56px)", marginBottom: 64, alignItems: "start" }}>
+                <div className="footer-grid-mb" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1.4fr", gap: "clamp(32px, 4vw, 56px)", marginBottom: 64, alignItems: "start" }}>
 
                     {/* Brand */}
                     <div>

@@ -71,7 +71,7 @@ async function getLatestPosts() {
 function RainbowWatermark() {
     return (
         <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style={{ position: "absolute", right: "-5%", top: "50%", transform: "translateY(-55%)", width: "clamp(360px, 55vw, 680px)", opacity: 0.10, pointerEvents: "none" }}
+            style={{ position: "absolute", right: "-5%", top: "50%", transform: "translateY(-55%)", width: "clamp(240px, 55vw, 680px)", opacity: 0.10, pointerEvents: "none" }}
             className="float-slow">
             <path d="M 20 340 Q 300 30 580 340" stroke="#D97706" strokeWidth="28" strokeLinecap="round"/>
             <path d="M 55 340 Q 300 85 545 340" stroke="#DB2777" strokeWidth="28" strokeLinecap="round"/>
@@ -95,7 +95,7 @@ export default async function HomePage() {
                 <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 70% at 15% 50%, rgba(217,119,6,.07) 0%, transparent 60%)", pointerEvents: "none" }} />
 
                 <div className="container" style={{ position: "relative", zIndex: 1, padding: "clamp(100px, 14vw, 160px) clamp(20px, 5vw, 72px) clamp(80px, 10vw, 120px)" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: "clamp(48px, 7vw, 96px)", alignItems: "center" }}>
+                    <div className="grid-hero" style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: "clamp(48px, 7vw, 96px)", alignItems: "center" }}>
 
                         {/* Left */}
                         <div>
@@ -153,7 +153,7 @@ export default async function HomePage() {
                 <div className="container">
                     <div className="grid-4">
                         {STATS.map((s, i) => (
-                            <div key={i} data-sr style={{
+                            <div key={i} data-sr className={i < 3 ? "stat-border-r" : ""} style={{
                                 textAlign: "center", padding: "8px 16px",
                                 borderRight: i < 3 ? "1px solid rgba(255,255,255,.08)" : "none",
                             }}>
@@ -193,7 +193,7 @@ export default async function HomePage() {
             {/* ── HISTOIRE + TIMELINE ── */}
             <section id="histoire" className="section" style={{ background: "var(--beige)" }}>
                 <div className="container">
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(48px, 7vw, 96px)", alignItems: "start" }}>
+                    <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(48px, 7vw, 96px)", alignItems: "start" }}>
 
                         {/* Photo */}
                         <div data-sr>
@@ -279,7 +279,7 @@ export default async function HomePage() {
                         <h2 data-sr style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)", color: "var(--navy)" }}>L&apos;espoir et la transformation</h2>
                     </div>
                     <div className="grid-2">
-                        <div data-sr style={{ padding: "44px 40px", borderRadius: 24, background: "#fff", border: "1px solid var(--border)", textAlign: "center" }}>
+                        <div data-sr style={{ padding: "clamp(24px,5vw,44px) clamp(20px,5vw,40px)", borderRadius: 24, background: "#fff", border: "1px solid var(--border)", textAlign: "center" }}>
                             <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
                                 <svg viewBox="0 0 120 76" fill="none" width="120" className="float-slow">
                                     <path d="M 6 68 Q 60 6 114 68" stroke="#D97706" strokeWidth="10" strokeLinecap="round"/>
@@ -292,7 +292,7 @@ export default async function HomePage() {
                                 L&apos;arc-en-ciel représente l&apos;espoir après la tempête. Il rappelle que même dans les moments les plus sombres, la lumière peut revenir. Il symbolise la résilience et la promesse que l&apos;espoir brille toujours.
                             </p>
                         </div>
-                        <div data-sr style={{ padding: "44px 40px", borderRadius: 24, background: "#fff", border: "1px solid var(--border)", textAlign: "center" }}>
+                        <div data-sr style={{ padding: "clamp(24px,5vw,44px) clamp(20px,5vw,40px)", borderRadius: 24, background: "#fff", border: "1px solid var(--border)", textAlign: "center" }}>
                             <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
                                 <IconButterfly size={80} color="#1E3A5F" className="float" />
                             </div>
