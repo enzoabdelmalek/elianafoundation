@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
-
 const SUBJECT_LABELS: Record<string, string> = {
     don: "Faire un don",
     partenariat: "Devenir partenaire",
@@ -22,6 +20,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Service email non configuré" }, { status: 500 });
     }
 
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const subjectLabel = SUBJECT_LABELS[subject] || subject || "Contact";
 
     const { error: notifError } = await resend.emails.send({
