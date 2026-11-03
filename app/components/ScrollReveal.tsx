@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
+// Apparition au défilement des éléments [data-sr] sous l'écran, rejouée à chaque page (navigation comprise).
 export default function ScrollReveal() {
-    useEffect(() => {
-        if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-        window.scrollTo({ top: 0, behavior: "instant" });
+    const pathname = usePathname();
 
+    useEffect(() => {
         const els = Array.from(document.querySelectorAll<HTMLElement>("[data-sr]"));
 
         const observer = new IntersectionObserver(
@@ -29,7 +30,7 @@ export default function ScrollReveal() {
         });
 
         return () => observer.disconnect();
-    }, []);
+    }, [pathname]);
 
     return null;
 }

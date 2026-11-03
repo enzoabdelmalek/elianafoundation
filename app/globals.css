@@ -105,8 +105,8 @@ a { color: inherit; text-decoration: none; }
 .timeline li { flex: 1 1 190px; position: relative; border-top: 2px solid var(--line); padding-top: 28px; }
 .timeline li::before { content: ""; position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
 
-.stats { display: flex; flex-wrap: wrap; }
-.stat  { flex: 1 1 220px; padding: 20px 24px; border-left: 1px solid var(--line); }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.stat  { padding: 20px 24px; border-left: 1px solid var(--line); }
 .stat:first-child { border-left: 0; }
 
 /* ─── Section sombre (hommage) ─── */
@@ -180,8 +180,12 @@ textarea.input { resize: vertical; line-height: 1.6; }
 @media (min-width: 861px) {
     .show-mobile { display: none !important; }
 }
+@media (max-width: 900px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stat:nth-child(odd) { border-left: 0; }
+}
 @media (max-width: 720px) {
-    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+    .stats { gap: 8px 16px; }
     .stat  { border-left: 0; padding: 16px 0; }
     .stat p:first-child { font-size: 40px !important; }
 }

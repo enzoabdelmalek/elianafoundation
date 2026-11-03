@@ -58,7 +58,8 @@ export default async function HomePage() {
                 </div>
 
                 <div className="h-anim h-a3" style={{ flexBasis: 380, display: "flex", justifyContent: "center" }}>
-                    <div style={{ position: "relative", width: "100%", maxWidth: 440, paddingTop: 32 }}>
+                    {/* 64 px de marge : les arcs débordent de 32 px de chaque côté de l'arche. */}
+                    <div style={{ position: "relative", width: "calc(100% - 64px)", maxWidth: 440, paddingTop: 32 }}>
                         <svg viewBox="0 0 504 284" fill="none" aria-hidden="true" style={{ position: "absolute", top: 0, left: -32, width: "calc(100% + 64px)" }}>
                             <path d="M20 252a232 232 0 0 1 464 0" stroke="var(--sky)" strokeWidth="2.5" strokeLinecap="round" />
                             <path d="M12 252a240 240 0 0 1 480 0" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
