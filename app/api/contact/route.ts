@@ -9,8 +9,12 @@ const SUBJECT_LABELS: Record<string, string> = {
     autre: "Autre",
 };
 
+// Les champs du visiteur partent dans du HTML (dont l'accusé de réception envoyé à l'adresse saisie) : on échappe tout.
+const esc = (v: unknown) => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
 export async function POST(req: NextRequest) {
-    const { name, email, subject, message } = await req.json();
+    const body = await req.json();
+    const name = esc(body.name), email = esc(body.email), message = esc(body.message), subject = String(body.subject ?? "");
 
     if (!name || !message) {
         return NextResponse.json({ error: "Champs requis manquants" }, { status: 400 });
@@ -21,7 +25,7 @@ export async function POST(req: NextRequest) {
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const subjectLabel = SUBJECT_LABELS[subject] || subject || "Contact";
+    const subjectLabel = esc(SUBJECT_LABELS[subject] || subject || "Contact");
 
     const { error: notifError } = await resend.emails.send({
         from: "Eliana Foundation <noreply@elianafoundation.org>",
@@ -65,7 +69,7 @@ export async function POST(req: NextRequest) {
     if (email) {
         await resend.emails.send({
             from: "Eliana Foundation <noreply@elianafoundation.org>",
-            to: email,
+            to: String(body.email),
             subject: "Nous avons bien reçu votre message - Eliana Foundation",
             html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">

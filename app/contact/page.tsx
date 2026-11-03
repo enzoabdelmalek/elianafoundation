@@ -160,7 +160,7 @@ export default function ContactPage() {
                         <div className="sidebar-sticky" style={{ display: "flex", flexDirection: "column", gap: 20, position: "sticky", top: 100 }}>
                             {/* Coordonnées */}
                             <div style={{ padding: "28px", borderRadius: 20, background: "var(--navy-deep)", color: "#fff" }}>
-                                <h3 style={{ fontSize: "1rem", marginBottom: 22, fontFamily: "'Playfair Display', serif" }}>Nous trouver</h3>
+                                <h3 style={{ fontSize: "1rem", marginBottom: 22, fontFamily: "var(--font-serif)" }}>Nous trouver</h3>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                                     <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                                         <IconMapPin size={16} color="var(--gold)" style={{ marginTop: 3, flexShrink: 0 }} />
@@ -187,7 +187,7 @@ export default function ContactPage() {
                                     <div style={{ width: 38, height: 38, borderRadius: 10, background: "var(--purple-soft)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                         <IconUsers size={18} color="var(--purple)" />
                                     </div>
-                                    <h3 style={{ fontSize: "0.95rem", color: "var(--navy)", fontFamily: "'Playfair Display', serif" }}>Devenir bénévole</h3>
+                                    <h3 style={{ fontSize: "0.95rem", color: "var(--navy)", fontFamily: "var(--font-serif)" }}>Devenir bénévole</h3>
                                 </div>
                                 <p style={{ fontSize: "0.82rem", color: "var(--muted)", lineHeight: 1.75, marginBottom: 14 }}>
                                     Médecins, soignants, communicants, logisticiens… nous avons besoin de vous.

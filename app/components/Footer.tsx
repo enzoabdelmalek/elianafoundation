@@ -8,7 +8,7 @@ const navCol = [
     { href: "/#mission", label: "Notre mission" },
     { href: "/#histoire",label: "Notre histoire" },
     { href: "/#hommage", label: "Hommage" },
-    { href: "/blog",     label: "Blog" },
+    { href: "/actualites", label: "Actualités" },
 ];
 
 const actCol = [

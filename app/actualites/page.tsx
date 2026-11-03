@@ -1,41 +1,16 @@
 import Link from "next/link";
-import { createClient } from "@supabase/supabase-js";
+import { listPosts, postDate } from "@/lib/posts";
 import { IconArrow, IconButterfly, IconHeart } from "../components/Icons";
 
-interface BlogPost {
-    id: string;
-    title: string;
-    slug: string;
-    excerpt?: string;
-    category?: string;
-    cover_image?: string;
-    published_at: string;
-    author?: string;
-}
-
-async function getPosts() {
-    try {
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-        const { data } = await supabase
-            .from("blog_posts")
-            .select("id, title, slug, excerpt, category, cover_image, published_at, author")
-            .eq("business_id", process.env.NEXT_PUBLIC_ELIANA_BUSINESS_ID)
-            .eq("active", true)
-            .order("published_at", { ascending: false });
-        return data ?? [];
-    } catch { return []; }
-}
+export const revalidate = 60;
 
 export const metadata = {
-    title: "Blog — Fondation Eliana",
+    title: "Actualités — Fondation Eliana",
     description: "Actualités, articles de sensibilisation et ressources sur le cancer pédiatrique en RDC.",
 };
 
-export default async function BlogPage() {
-    const posts  = await getPosts();
+export default async function ActualitesPage() {
+    const posts  = await listPosts();
     const featured = posts[0] ?? null;
     const rest     = posts.slice(1);
 
@@ -53,7 +28,7 @@ export default async function BlogPage() {
                     <div className="h-anim h-a1" style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
                         <div className="float"><IconButterfly size={44} color="rgba(255,255,255,.45)" /></div>
                     </div>
-                    <p className="h-anim h-a2 section-label section-label-white" style={{ textAlign: "center" }}>Blog & Actualités</p>
+                    <p className="h-anim h-a2 section-label section-label-white" style={{ textAlign: "center" }}>Actualités</p>
                     <h1 className="h-anim h-a3" style={{ fontSize: "clamp(2rem, 5vw, 3.8rem)", marginBottom: 16, lineHeight: 1.12 }}>
                         Sensibilisation &amp;{" "}
                         <span className="font-script" style={{ color: "var(--gold)", fontSize: "1.08em" }}>ressources</span>
@@ -83,7 +58,7 @@ export default async function BlogPage() {
                     {featured && (
                         <section style={{ background: "var(--navy-deep)" }}>
                             <div className="container">
-                                <Link href={`/blog/${featured.slug}`} style={{ display: "block" }}>
+                                <Link href={`/actualites/${featured.slug}`} style={{ display: "block" }}>
                                     <div className="grid-featured" style={{
                                         display: "grid", gridTemplateColumns: "1fr 1fr",
                                         gap: "clamp(40px, 6vw, 80px)", alignItems: "center",
@@ -92,8 +67,8 @@ export default async function BlogPage() {
                                         {/* Image */}
                                         <div style={{ position: "relative", borderRadius: 20, overflow: "hidden", aspectRatio: "4/3" }}>
                                             <div className="photo-slot" style={{ width: "100%", height: "100%" }}>
-                                                {featured.cover_image && (
-                                                    <img src={featured.cover_image} alt={featured.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                                {featured.cover_url && (
+                                                    <img src={featured.cover_url} alt={featured.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                                 )}
                                             </div>
                                             <div style={{ position: "absolute", top: 16, left: 16 }}>
@@ -102,14 +77,11 @@ export default async function BlogPage() {
                                         </div>
                                         {/* Text */}
                                         <div>
-                                            {featured.category && <span className="tag tag-white" style={{ marginBottom: 18, display: "inline-flex" }}>{featured.category}</span>}
+                                            {featured.tags[0] && <span className="tag tag-white" style={{ marginBottom: 18, display: "inline-flex" }}>{featured.tags[0]}</span>}
                                             <h2 style={{ fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)", color: "#fff", lineHeight: 1.25, marginTop: 12, marginBottom: 18 }}>{featured.title}</h2>
                                             {featured.excerpt && <p style={{ color: "rgba(255,255,255,.62)", lineHeight: 1.9, fontSize: "0.92rem", marginBottom: 28 }}>{featured.excerpt}</p>}
                                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-                                                <p style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.4)" }}>
-                                                    {new Date(featured.published_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
-                                                    {featured.author && ` · ${featured.author}`}
-                                                </p>
+                                                <p style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.4)" }}>{postDate(featured)}</p>
                                                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.82rem", color: "var(--gold)", fontWeight: 600 }}>
                                                     Lire l&apos;article <IconArrow size={14} color="var(--gold)" />
                                                 </span>
@@ -132,19 +104,17 @@ export default async function BlogPage() {
                                     </div>
                                 </div>
                                 <div className="grid-3">
-                                    {rest.map((post: BlogPost) => (
-                                        <Link key={post.id} href={`/blog/${post.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
+                                    {rest.map(post => (
+                                        <Link key={post.id} href={`/actualites/${post.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
                                             <div className="blog-card-img photo-slot">
-                                                {post.cover_image && <img src={post.cover_image} alt={post.title} />}
+                                                {post.cover_url && <img src={post.cover_url} alt={post.title} />}
                                             </div>
                                             <div className="blog-card-body">
-                                                {post.category && <span className="tag tag-gold" style={{ alignSelf: "flex-start", fontSize: "0.62rem" }}>{post.category}</span>}
-                                                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem", fontWeight: 700, color: "var(--navy)", lineHeight: 1.4 }}>{post.title}</h3>
+                                                {post.tags[0] && <span className="tag tag-gold" style={{ alignSelf: "flex-start", fontSize: "0.62rem" }}>{post.tags[0]}</span>}
+                                                <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", fontWeight: 700, color: "var(--navy)", lineHeight: 1.4 }}>{post.title}</h3>
                                                 {post.excerpt && <p style={{ fontSize: "0.84rem", color: "var(--muted)", lineHeight: 1.75, flex: 1 }}>{post.excerpt}</p>}
                                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto" }}>
-                                                    <p style={{ fontSize: "0.72rem", color: "var(--muted-light)" }}>
-                                                        {new Date(post.published_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
-                                                    </p>
+                                                    <p style={{ fontSize: "0.72rem", color: "var(--muted-light)" }}>{postDate(post)}</p>
                                                     <span style={{ fontSize: "0.72rem", color: "var(--navy)", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 4 }}>
                                                         Lire <IconArrow size={11} color="var(--navy)" />
                                                     </span>

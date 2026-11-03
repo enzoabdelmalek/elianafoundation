@@ -8,7 +8,7 @@ import { IconRainbowBrand, IconHeart } from "./Icons";
 const navLinks = [
     { href: "/",        label: "Accueil" },
     { href: "/#mission", label: "Notre mission" },
-    { href: "/blog",    label: "Blog" },
+    { href: "/actualites", label: "Actualités" },
     { href: "/contact", label: "Contact" },
 ];
 
@@ -18,7 +18,7 @@ export default function Header() {
     const pathname = usePathname();
 
     // Pages with dark (navy) hero — header starts transparent with white text
-    const isDark = pathname === "/" || pathname === "/don" || pathname.startsWith("/blog");
+    const isDark = pathname === "/" || pathname === "/don" || pathname.startsWith("/actualites");
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 30);
@@ -121,7 +121,7 @@ export default function Header() {
                 {navLinks.map((l, i) => (
                     <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
                         style={{
-                            fontFamily: "'Playfair Display', serif",
+                            fontFamily: "var(--font-serif)",
                             fontSize: "clamp(1.6rem, 6vw, 2.2rem)",
                             color: isActive(l.href) ? "var(--gold)" : "rgba(255,255,255,0.85)",
                             transition: "color 0.2s",

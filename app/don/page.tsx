@@ -1,19 +1,14 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { IconHeart, IconArrow, IconButterfly, IconCheck } from "../components/Icons";
+import { IconArrow, IconButterfly, IconCheck } from "../components/Icons";
 
-const AMOUNTS_UNIQUE   = [25, 50, 100, 250];
-const AMOUNTS_MENSUEL  = [10, 25, 50, 100];
-
-const IMPACTS: Record<number, string> = {
-    10:  "10$ contribue à un repas pour une famille en traitement",
-    25:  "25$ aide à financer du matériel de sensibilisation scolaire",
-    50:  "50$ soutient une consultation médicale pour un enfant",
-    100: "100$ finance un mois complet de suivi médical",
-    250: "250$ forme un professionnel de santé en oncologie pédiatrique",
+export const metadata = {
+    title: "Faire un don — Fondation Eliana",
+    description: "Soutenez la Fondation Eliana dans sa lutte contre le cancer pédiatrique en RDC.",
 };
+
+// Adresse « widget » du formulaire de don HelloAsso (HelloAsso > formulaire > Diffusion > Intégrer).
+// Vide : la page explique que la collecte n'est pas encore ouverte.
+const HELLOASSO_WIDGET_URL = process.env.HELLOASSO_WIDGET_URL;
 
 const TRUST = [
     "Transparence totale sur l'utilisation des fonds",
@@ -22,18 +17,6 @@ const TRUST = [
 ];
 
 export default function DonPage() {
-    const [tab, setTab]       = useState<"unique" | "mensuel">("unique");
-    const [amount, setAmount] = useState(50);
-    const [custom, setCustom] = useState("");
-    const [step, setStep]     = useState<"select" | "form">("select");
-    const [form, setForm]     = useState({ firstName: "", lastName: "", email: "", message: "" });
-
-    const activeAmount = custom ? parseFloat(custom) || 0 : amount;
-    const amounts = tab === "unique" ? AMOUNTS_UNIQUE : AMOUNTS_MENSUEL;
-    const impact  = IMPACTS[activeAmount] ?? null;
-
-    const handleSelect = (v: number) => { setAmount(v); setCustom(""); };
-
     return (
         <>
             {/* ── HERO compact navy ── */}
@@ -62,121 +45,29 @@ export default function DonPage() {
             {/* ── FORM (chevauche le hero) ── */}
             <section style={{ background: "var(--beige)", paddingBottom: "clamp(64px, 10vw, 100px)" }}>
                 <div className="container">
-                    <div className="grid-don-form" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "clamp(32px, 5vw, 56px)", alignItems: "start", marginTop: -60 }}>
+                    <div className="grid-don-form" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "clamp(32px, 5vw, 56px)", alignItems: "start", marginTop: -60, position: "relative", zIndex: 1 }}>
 
-                        {/* Card formulaire */}
+                        {/* Card don : formulaire HelloAsso, ou message tant que la collecte n'est pas ouverte */}
                         <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 32px 80px rgba(15,37,64,.15)", overflow: "hidden" }}>
-                            {/* Tabs */}
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-                                {(["unique", "mensuel"] as const).map(t => (
-                                    <button key={t} onClick={() => { setTab(t); setAmount(t === "unique" ? 50 : 25); setCustom(""); setStep("select"); }}
-                                        style={{
-                                            padding: "18px 24px", border: "none", cursor: "pointer",
-                                            background: tab === t ? "#fff" : "var(--surface)",
-                                            fontWeight: 700, fontSize: "0.85rem",
-                                            color: tab === t ? "var(--navy)" : "var(--muted)",
-                                            borderBottom: tab === t ? "2.5px solid var(--gold)" : "2.5px solid transparent",
-                                            transition: "all 0.2s",
-                                        }}>
-                                        {t === "unique" ? "Don unique" : "Don mensuel"}
-                                    </button>
-                                ))}
-                            </div>
-
-                            <div style={{ padding: "clamp(28px, 4vw, 44px)" }}>
-                                {step === "select" ? (
-                                    <>
-                                        <p style={{ fontSize: "0.85rem", color: "var(--muted)", marginBottom: 24, lineHeight: 1.7 }}>
-                                            {tab === "mensuel" ? "Votre don régulier nous permet de planifier et pérenniser nos actions sur le terrain." : "Votre don unique contribue directement à nos programmes en République Démocratique du Congo."}
-                                        </p>
-
-                                        <div className="grid-amount-btn" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 14 }}>
-                                            {amounts.map(a => (
-                                                <button key={a} onClick={() => handleSelect(a)}
-                                                    className={`amount-btn${amount === a && !custom ? " active" : ""}`}>
-                                                    {a}$
-                                                </button>
-                                            ))}
-                                        </div>
-
-                                        <div style={{ position: "relative", marginBottom: 24 }}>
-                                            <input type="number" placeholder="Autre montant ($)" value={custom}
-                                                onChange={e => { setCustom(e.target.value); setAmount(0); }}
-                                                style={{ width: "100%", padding: "13px 20px 13px 40px", borderRadius: 12, border: "2px solid var(--border)", fontSize: "0.92rem", outline: "none", transition: "border 0.2s" }}
-                                                onFocus={e => e.target.style.borderColor = "var(--gold)"}
-                                                onBlur={e => e.target.style.borderColor = "var(--border)"}
-                                            />
-                                            <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--muted)", fontWeight: 600, fontSize: "0.85rem" }}>$</span>
-                                        </div>
-
-                                        {impact && (
-                                            <div style={{ padding: "14px 18px", borderRadius: 12, background: "var(--gold-soft)", border: "1px solid var(--gold-light)", display: "flex", gap: 12, alignItems: "center", marginBottom: 24 }}>
-                                                <IconHeart size={16} color="var(--gold)" style={{ flexShrink: 0 }} />
-                                                <p style={{ fontSize: "0.83rem", color: "var(--gold-dark)", lineHeight: 1.6 }}>{impact}</p>
-                                            </div>
-                                        )}
-
-                                        {activeAmount > 0 && (
-                                            <div style={{ padding: "18px 22px", borderRadius: 14, background: "var(--surface)", border: "1px solid var(--border)", marginBottom: 22, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                                <span style={{ fontSize: "0.85rem", color: "var(--muted)" }}>{tab === "unique" ? "Don unique de" : "Don mensuel de"}</span>
-                                                <span style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--navy)", fontFamily: "'Playfair Display', serif" }}>{activeAmount} $</span>
-                                            </div>
-                                        )}
-
-                                        <button onClick={() => setStep("form")} disabled={activeAmount <= 0}
-                                            className="btn btn-gold" style={{ width: "100%", justifyContent: "center", opacity: activeAmount <= 0 ? 0.5 : 1 }}>
-                                            <IconHeart size={15} color="#fff" />
-                                            Continuer — {activeAmount}${tab === "mensuel" ? "/mois" : ""}
-                                        </button>
-                                    </>
-                                ) : (
-                                    <form onSubmit={e => { e.preventDefault(); alert("Connexion Stripe à venir. Merci !"); }}>
-                                        <button type="button" onClick={() => setStep("select")}
-                                            style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, color: "var(--muted)", fontSize: "0.82rem", marginBottom: 24 }}>
-                                            <span style={{ transform: "rotate(180deg)", display: "inline-flex" }}><IconArrow size={12} color="var(--muted)" /></span> Retour
-                                        </button>
-                                        <div style={{ padding: "14px 20px", borderRadius: 12, background: "var(--gold-soft)", border: "1px solid var(--gold-light)", marginBottom: 24, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                            <span style={{ fontSize: "0.82rem", color: "var(--gold-dark)" }}>Votre don</span>
-                                            <span style={{ fontWeight: 800, fontSize: "1.3rem", color: "var(--gold)", fontFamily: "'Playfair Display', serif" }}>{activeAmount}${tab === "mensuel" ? "/mois" : ""}</span>
-                                        </div>
-                                        <div className="grid-name-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
-                                            {[
-                                                { id: "firstName", label: "Prénom", type: "text" },
-                                                { id: "lastName",  label: "Nom",    type: "text" },
-                                            ].map(({ id, label, type }) => (
-                                                <div key={id}>
-                                                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, color: "var(--navy)", marginBottom: 6 }}>{label}</label>
-                                                    <input type={type} required value={form[id as keyof typeof form]} onChange={e => setForm(f => ({ ...f, [id]: e.target.value }))}
-                                                        style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "2px solid var(--border)", fontSize: "0.88rem", outline: "none", transition: "border 0.2s" }}
-                                                        onFocus={e => e.target.style.borderColor = "var(--gold)"}
-                                                        onBlur={e => e.target.style.borderColor = "var(--border)"} />
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div style={{ marginBottom: 14 }}>
-                                            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, color: "var(--navy)", marginBottom: 6 }}>Email</label>
-                                            <input type="email" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                                                style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "2px solid var(--border)", fontSize: "0.88rem", outline: "none", transition: "border 0.2s" }}
-                                                onFocus={e => e.target.style.borderColor = "var(--gold)"}
-                                                onBlur={e => e.target.style.borderColor = "var(--border)"} />
-                                        </div>
-                                        <div style={{ marginBottom: 22 }}>
-                                            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, color: "var(--navy)", marginBottom: 6 }}>Message (optionnel)</label>
-                                            <textarea rows={3} value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                                                style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "2px solid var(--border)", fontSize: "0.88rem", outline: "none", resize: "none", transition: "border 0.2s" }}
-                                                onFocus={e => e.target.style.borderColor = "var(--gold)"}
-                                                onBlur={e => e.target.style.borderColor = "var(--border)"} />
-                                        </div>
-                                        <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginBottom: 20, lineHeight: 1.6 }}>
-                                            Paiement sécurisé par Stripe. Vos données ne sont jamais partagées. Reçu fiscal envoyé par email.
-                                        </p>
-                                        <button type="submit" className="btn btn-gold" style={{ width: "100%", justifyContent: "center" }}>
-                                            <IconHeart size={15} color="#fff" />
-                                            Faire un don de {activeAmount}${tab === "mensuel" ? "/mois" : ""}
-                                        </button>
-                                    </form>
-                                )}
-                            </div>
+                            {HELLOASSO_WIDGET_URL ? (
+                                <iframe src={HELLOASSO_WIDGET_URL} title="Formulaire de don HelloAsso"
+                                    style={{ display: "block", width: "100%", height: 760, border: "none" }} />
+                            ) : (
+                                <div style={{ padding: "clamp(28px, 4vw, 44px)", textAlign: "center" }}>
+                                    <div className="float" style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+                                        <IconButterfly size={48} color="var(--navy)" />
+                                    </div>
+                                    <h2 style={{ fontSize: "clamp(1.4rem, 2.5vw, 1.8rem)", color: "var(--navy)", marginBottom: 14 }}>
+                                        La collecte de dons arrive bientôt
+                                    </h2>
+                                    <p style={{ fontSize: "0.92rem", color: "var(--muted)", lineHeight: 1.85, maxWidth: 460, margin: "0 auto 28px" }}>
+                                        La collecte de dons n&apos;est pas encore active sur notre site. Vous pouvez nous contacter via le formulaire pour avoir plus d&apos;informations.
+                                    </p>
+                                    <Link href="/contact" className="btn btn-gold">
+                                        Nous contacter <IconArrow size={14} color="#fff" />
+                                    </Link>
+                                </div>
+                            )}
                         </div>
 
                         {/* Sidebar */}

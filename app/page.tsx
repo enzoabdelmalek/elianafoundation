@@ -1,19 +1,12 @@
 import Link from "next/link";
-import { createClient } from "@supabase/supabase-js";
+import { listPosts, postDate } from "@/lib/posts";
 import {
     IconHeart, IconArrow, IconButterfly, IconSearch,
     IconUsers, IconMegaphone, IconCross, IconCheck, IconRainbowBrand,
 } from "./components/Icons";
 
-interface BlogPost {
-    id: string;
-    title: string;
-    slug: string;
-    excerpt?: string;
-    category?: string;
-    cover_image?: string;
-    published_at: string;
-}
+// Les dernières actualités publiées depuis le dashboard apparaissent en une minute.
+export const revalidate = 60;
 
 /* ─── Data ─── */
 const PILLARS = [
@@ -49,24 +42,6 @@ const ACTIONS = [
     "Établir des partenariats durables nationaux et internationaux",
 ];
 
-/* ─── Blog fetch ─── */
-async function getLatestPosts() {
-    try {
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-        const { data } = await supabase
-            .from("blog_posts")
-            .select("id, title, slug, excerpt, category, cover_image, published_at")
-            .eq("business_id", process.env.NEXT_PUBLIC_ELIANA_BUSINESS_ID)
-            .eq("active", true)
-            .order("published_at", { ascending: false })
-            .limit(3);
-        return data ?? [];
-    } catch { return []; }
-}
-
 /* ─── Rainbow watermark SVG ─── */
 function RainbowWatermark() {
     return (
@@ -81,7 +56,7 @@ function RainbowWatermark() {
 }
 
 export default async function HomePage() {
-    const posts = await getLatestPosts();
+    const posts = await listPosts(3);
 
     return (
         <>
@@ -140,7 +115,7 @@ export default async function HomePage() {
                                 minWidth: 190,
                             }}>
                                 <p style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Enfants accompagnés</p>
-                                <p style={{ fontSize: "2.4rem", fontWeight: 800, color: "var(--navy)", fontFamily: "'Playfair Display', serif", lineHeight: 1 }}>340+</p>
+                                <p style={{ fontSize: "2.4rem", fontWeight: 800, color: "var(--navy)", fontFamily: "var(--font-serif)", lineHeight: 1 }}>340+</p>
                                 <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: 6 }}>depuis 2023 en RDC</p>
                             </div>
                         </div>
@@ -157,7 +132,7 @@ export default async function HomePage() {
                                 textAlign: "center", padding: "8px 16px",
                                 borderRight: i < 3 ? "1px solid rgba(255,255,255,.08)" : "none",
                             }}>
-                                <p style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800, color: "var(--gold)", fontFamily: "'Playfair Display', serif", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{s.num}</p>
+                                <p style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800, color: "var(--gold)", fontFamily: "var(--font-serif)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{s.num}</p>
                                 <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,.5)", marginTop: 8, lineHeight: 1.4 }}>{s.label}</p>
                             </div>
                         ))}
@@ -182,7 +157,7 @@ export default async function HomePage() {
                                 <div style={{ width: 58, height: 58, borderRadius: 16, background: p.bg, border: `1px solid ${p.border}`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
                                     <p.Icon size={26} color={p.color} />
                                 </div>
-                                <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--navy)", marginBottom: 10, fontFamily: "'Playfair Display', serif" }}>{p.title}</h3>
+                                <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--navy)", marginBottom: 10, fontFamily: "var(--font-serif)" }}>{p.title}</h3>
                                 <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.8 }}>{p.desc}</p>
                             </div>
                         ))}
@@ -193,7 +168,7 @@ export default async function HomePage() {
             {/* ── HISTOIRE + TIMELINE ── */}
             <section id="histoire" className="section" style={{ background: "var(--beige)" }}>
                 <div className="container">
-                    <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(48px, 7vw, 96px)", alignItems: "start" }}>
+                    <div className="grid-2" style={{ gap: "clamp(48px, 7vw, 96px)", alignItems: "start" }}>
 
                         {/* Photo */}
                         <div data-sr>
@@ -225,7 +200,7 @@ export default async function HomePage() {
                                         </div>
                                         <div style={{ flex: 1, paddingTop: 6 }}>
                                             <span style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 4 }}>{item.year}</span>
-                                            <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--navy)", marginBottom: 6, fontFamily: "'Playfair Display', serif" }}>{item.title}</h3>
+                                            <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--navy)", marginBottom: 6, fontFamily: "var(--font-serif)" }}>{item.title}</h3>
                                             <p style={{ fontSize: "0.82rem", color: "var(--muted)", lineHeight: 1.75 }}>{item.text}</p>
                                         </div>
                                     </div>
@@ -361,26 +336,24 @@ export default async function HomePage() {
                     <div className="container">
                         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 56, flexWrap: "wrap", gap: 20 }}>
                             <div>
-                                <span className="section-label" data-sr>Blog & Actualités</span>
+                                <span className="section-label" data-sr>Actualités</span>
                                 <h2 data-sr style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "var(--navy)" }}>Dernières nouvelles</h2>
                             </div>
-                            <Link href="/blog" className="btn btn-outline" data-sr style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                                Tous les articles <IconArrow size={14} color="var(--navy)" />
+                            <Link href="/actualites" className="btn btn-outline" data-sr style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                                Toutes les actualités <IconArrow size={14} color="var(--navy)" />
                             </Link>
                         </div>
                         <div className="grid-3">
-                            {posts.map((post: BlogPost) => (
-                                <Link key={post.id} href={`/blog/${post.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
+                            {posts.map(post => (
+                                <Link key={post.id} href={`/actualites/${post.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
                                     <div className="blog-card-img photo-slot">
-                                        {post.cover_image && <img src={post.cover_image} alt={post.title} />}
+                                        {post.cover_url && <img src={post.cover_url} alt={post.title} />}
                                     </div>
                                     <div className="blog-card-body">
-                                        {post.category && <span className="tag tag-gold">{post.category}</span>}
-                                        <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem", fontWeight: 700, color: "var(--navy)", lineHeight: 1.4 }}>{post.title}</h3>
+                                        {post.tags[0] && <span className="tag tag-gold">{post.tags[0]}</span>}
+                                        <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", fontWeight: 700, color: "var(--navy)", lineHeight: 1.4 }}>{post.title}</h3>
                                         {post.excerpt && <p style={{ fontSize: "0.84rem", color: "var(--muted)", lineHeight: 1.75, flex: 1 }}>{post.excerpt}</p>}
-                                        <p style={{ fontSize: "0.72rem", color: "var(--muted-light)" }}>
-                                            {new Date(post.published_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
-                                        </p>
+                                        <p style={{ fontSize: "0.72rem", color: "var(--muted-light)" }}>{postDate(post)}</p>
                                     </div>
                                 </Link>
                             ))}

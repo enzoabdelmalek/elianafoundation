@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 /* ─── Tokens ─── */
@@ -28,15 +27,15 @@
 /* ─── Reset ─── */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 18px; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.7; -webkit-font-smoothing: antialiased; }
-h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.15; }
+body { font-family: var(--font-sans); background: var(--bg); color: var(--fg); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: var(--font-serif); line-height: 1.15; }
 a { text-decoration: none; }
 img { max-width: 100%; display: block; }
 button { font-family: inherit; }
 
 /* ─── Typography ─── */
-.font-script { font-family: 'Dancing Script', cursive; }
-.font-serif  { font-family: 'Playfair Display', serif; }
+.font-script { font-family: var(--font-script); }
+.font-serif  { font-family: var(--font-serif); }
 
 /* ─── Layout ─── */
 .container    { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 72px); }
@@ -125,6 +124,20 @@ button { font-family: inherit; }
 .blog-card:hover .blog-card-img img { transform: scale(1.05); }
 .blog-card-body { padding: 24px 26px; display: flex; flex-direction: column; gap: 10px; }
 
+/* Corps d'article (Markdown du dashboard) */
+.article-body { line-height: 2; color: var(--fg); font-size: 17.5px; }
+.article-body p, .article-body ul { margin-bottom: 26px; }
+.article-body ul { padding-left: 1.2em; }
+.article-body h2 { font-size: 1.5rem; color: var(--navy); margin: 44px 0 16px; }
+.article-body h3 { font-size: 1.2rem; color: var(--navy); margin: 32px 0 12px; }
+.article-body strong { font-weight: 700; color: var(--navy); }
+.article-body a { color: var(--purple); text-decoration: underline; }
+.article-body blockquote {
+    margin: 40px 0; padding: clamp(16px,4vw,28px) clamp(16px,4vw,36px);
+    background: var(--beige); border-left: 4px solid var(--gold); border-radius: 0 16px 16px 0;
+    font-family: var(--font-serif); font-style: italic; font-size: 1.15rem; color: var(--navy); line-height: 1.8;
+}
+
 /* ─── Timeline ─── */
 .timeline { display: flex; flex-direction: column; position: relative; }
 .timeline::before {
@@ -166,7 +179,7 @@ button { font-family: inherit; }
 .faq-btn {
     width: 100%; display: flex; align-items: center; justify-content: space-between;
     padding: 22px 0; background: none; border: none; cursor: pointer;
-    font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
+    font-family: var(--font-serif); font-size: 1rem; font-weight: 600;
     color: var(--navy); text-align: left; gap: 16px;
     transition: color 0.2s;
 }
