@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { IconArrow, IconButterfly } from "../components/Icons";
+import { CONTACT_SUBJECTS } from "@/lib/contact";
 
 const FAQ = [
     {
@@ -27,10 +28,8 @@ const FAQ = [
     },
 ];
 
-const SUBJECTS = ["Bénévolat", "Partenariat", "Don / fiscal", "Question générale", "Presse & médias"];
-
 export default function ContactPage() {
-    const [form, setForm]       = useState({ name: "", email: "", subject: "", message: "" });
+    const [form, setForm]       = useState({ first_name: "", last_name: "", email: "", phone: "", subject: "", message: "" });
     const [sent, setSent]       = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError]     = useState("");
@@ -47,10 +46,13 @@ export default function ContactPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
             });
+            const json = await res.json().catch(() => ({}));
+            // 422 : le dashboard renvoie un message par champ.
+            if (res.status === 422 && json.errors) { setError(Object.values(json.errors as Record<string, string>).join(" ")); return; }
             if (!res.ok) throw new Error();
             setSent(true);
         } catch {
-            setError("Une erreur est survenue. Veuillez réessayer.");
+            setError("Une erreur est survenue. Veuillez réessayer, ou écrivez-nous à contact@elianafoundation.org.");
         } finally {
             setLoading(false);
         }
@@ -81,19 +83,29 @@ export default function ContactPage() {
                             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                                 <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
                                     <div className="field" style={{ flex: "1 1 220px" }}>
-                                        <label htmlFor="c-name">Nom complet</label>
-                                        <input id="c-name" className="input" type="text" required autoComplete="name" placeholder="Prénom Nom" value={form.name} onChange={set("name")} />
+                                        <label htmlFor="c-first">Prénom</label>
+                                        <input id="c-first" className="input" type="text" required autoComplete="given-name" value={form.first_name} onChange={set("first_name")} />
                                     </div>
+                                    <div className="field" style={{ flex: "1 1 220px" }}>
+                                        <label htmlFor="c-last">Nom</label>
+                                        <input id="c-last" className="input" type="text" autoComplete="family-name" value={form.last_name} onChange={set("last_name")} />
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
                                     <div className="field" style={{ flex: "1 1 220px" }}>
                                         <label htmlFor="c-email">Adresse email</label>
                                         <input id="c-email" className="input" type="email" required autoComplete="email" placeholder="vous@exemple.com" value={form.email} onChange={set("email")} />
+                                    </div>
+                                    <div className="field" style={{ flex: "1 1 220px" }}>
+                                        <label htmlFor="c-phone">Téléphone <span className="muted" style={{ fontWeight: 400 }}>(facultatif)</span></label>
+                                        <input id="c-phone" className="input" type="tel" autoComplete="tel" value={form.phone} onChange={set("phone")} />
                                     </div>
                                 </div>
                                 <div className="field">
                                     <label htmlFor="c-subject">Sujet</label>
                                     <select id="c-subject" className="input" required value={form.subject} onChange={set("subject")}>
                                         <option value="" disabled>Sélectionner un sujet…</option>
-                                        {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
+                                        {CONTACT_SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
                                 </div>
                                 <div className="field">
@@ -117,7 +129,7 @@ export default function ContactPage() {
                         <div className="card" style={{ background: "var(--accent-tint)", border: 0 }}>
                             <h2 style={{ fontSize: 26, marginBottom: 10 }}>Devenir bénévole</h2>
                             <p className="muted" style={{ fontSize: 15, marginBottom: 18 }}>Médecins, soignants, communicants, logisticiens… nous avons besoin de vous.</p>
-                            <button type="button" className="btn btn-outline btn-sm" onClick={() => { setForm(f => ({ ...f, subject: "Bénévolat" })); document.getElementById("c-name")?.focus(); }}>
+                            <button type="button" className="btn btn-outline btn-sm" onClick={() => { setForm(f => ({ ...f, subject: "Bénévolat" })); document.getElementById("c-first")?.focus(); }}>
                                 Je veux aider
                             </button>
                         </div>
