@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Dancing_Script, Inter, Playfair_Display } from "next/font/google";
+import { Figtree, Newsreader } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -17,13 +17,12 @@ export const metadata: Metadata = {
 };
 
 // Polices servies par le site (next/font) : l'@import Google Fonts du CSS était écarté par Tailwind 4.
-const serif  = Playfair_Display({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif" });
-const script = Dancing_Script({ subsets: ["latin"], variable: "--font-script" });
-const sans   = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const serif = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif" });
+const sans  = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="fr" data-scroll-behavior="smooth" className={`${serif.variable} ${script.variable} ${sans.variable}`}>
+        <html lang="fr" data-scroll-behavior="smooth" className={`${serif.variable} ${sans.variable}`}>
             <body>
                 <Header />
                 <main>{children}</main>

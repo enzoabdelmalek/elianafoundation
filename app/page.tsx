@@ -1,328 +1,166 @@
 import Link from "next/link";
-import { listPosts, postDate } from "@/lib/posts";
-import {
-    IconHeart, IconArrow, IconButterfly, IconSearch,
-    IconUsers, IconMegaphone, IconCross, IconCheck, IconRainbowBrand,
-} from "./components/Icons";
+import { listPosts } from "@/lib/posts";
+import { IconArrow, IconButterfly } from "./components/Icons";
+import Photo from "./components/Photo";
+import PostCard from "./components/PostCard";
+import DonCta from "./components/DonCta";
 
 // Les dernières actualités publiées depuis le dashboard apparaissent en une minute.
 export const revalidate = 60;
 
-/* ─── Data ─── */
-const PILLARS = [
-    { Icon: IconSearch,    bg: "var(--gold-soft)",   border: "var(--gold-light)",   color: "var(--gold)",   title: "Diagnostic précoce",    desc: "Favoriser l'accès à un diagnostic précoce et fiable pour augmenter les chances de guérison." },
-    { Icon: IconUsers,     bg: "#E0F2FE",             border: "#BAE6FD",             color: "#0284C7",       title: "Soutien aux familles",  desc: "Accompagner les enfants et leurs familles tout au long du traitement, sans les laisser seuls." },
-    { Icon: IconMegaphone, bg: "var(--pink-light)",   border: "#FBCFE8",             color: "var(--pink)",   title: "Sensibilisation",       desc: "Développer des programmes d'éducation à la santé et des campagnes d'information en RDC." },
-    { Icon: IconCross,     bg: "var(--purple-soft)",  border: "var(--purple-light)", color: "var(--purple)", title: "Accès aux soins",       desc: "Réduire les inégalités d'accès et soutenir des traitements conformes aux protocoles reconnus." },
+/* ─── Contenu ─── */
+const STATS = [
+    { num: "340+", label: "Enfants accompagnés" },
+    { num: "12",   label: "Hôpitaux partenaires" },
+    { num: "94 %", label: "Taux de satisfaction des familles" },
+    { num: "2023", label: "Création, en activité en RDC" },
 ];
 
-const STATS = [
-    { num: "340+",    label: "Enfants accompagnés" },
-    { num: "12",      label: "Hôpitaux partenaires" },
-    { num: "94 %",    label: "Taux de satisfaction familles" },
-    { num: "Depuis 2023", label: "En activité en RDC" },
+// Les huit actions de la fondation, rangées sous le pilier qu'elles servent.
+const PILLARS = [
+    { title: "Diagnostic précoce", desc: "Favoriser l'accès à un diagnostic précoce et fiable pour augmenter les chances de guérison.",
+      actions: ["Favoriser l'accès au diagnostic précoce et fiable", "Renforcer les capacités des structures de santé"] },
+    { title: "Soutien aux familles", desc: "Accompagner les enfants et leurs familles tout au long du traitement, sans les laisser seuls.",
+      actions: ["Accompagner les enfants et leurs familles", "Prévenir les abandons de traitement"] },
+    { title: "Sensibilisation", desc: "Développer des programmes d'éducation à la santé et des campagnes d'information en RDC.",
+      actions: ["Développer des programmes de sensibilisation"] },
+    { title: "Accès aux soins", desc: "Réduire les inégalités d'accès et soutenir des traitements conformes aux protocoles reconnus.",
+      actions: ["Soutenir l'accès à des traitements appropriés", "Réduire les inégalités d'accès aux soins", "Établir des partenariats durables nationaux et internationaux"] },
 ];
 
 const TIMELINE = [
-    { year: "2016", title: "Diagnostic à 3 ans",         text: "Eliana reçoit son diagnostic de neuroblastome métastatique. Une famille plongée dans l'incertitude." },
-    { year: "2020", title: "Quatre ans de combat",        text: "Traitements, espoir, rechutes. Eliana lutte avec une bravoure et une résilience qui inspirent tous ceux qui l'entourent." },
-    { year: "2022", title: "Eliana s'en va",              text: "Après six ans de combat, Eliana nous quitte à l'âge de 9 ans. Ses arcs-en-ciel, ses papillons, sa lumière restent." },
-    { year: "2023", title: "La fondation naît",           text: "Sa famille crée la Fondation Eliana pour transformer sa lumière en actions concrètes en République Démocratique du Congo." },
-    { year: "2026", title: "340+ enfants accompagnés",    text: "La mission grandit. 12 hôpitaux partenaires. Une équipe engagée pour chaque enfant qui doit affronter cette maladie." },
+    { year: "2016", title: "Diagnostic à 3 ans",       text: "Eliana reçoit son diagnostic de neuroblastome métastatique. Une famille plongée dans l'incertitude." },
+    { year: "2020", title: "Quatre ans de combat",     text: "Traitements, espoir, rechutes. Eliana lutte avec une bravoure et une résilience qui inspirent tous ceux qui l'entourent." },
+    { year: "2022", title: "Eliana s'en va",           text: "Après six ans de combat, Eliana nous quitte à l'âge de 9 ans. Ses arcs-en-ciel, ses papillons, sa lumière restent." },
+    { year: "2023", title: "La fondation naît",        text: "Sa famille crée la Fondation Eliana pour transformer sa lumière en actions concrètes en République Démocratique du Congo." },
+    { year: "2026", title: "340+ enfants accompagnés", text: "La mission grandit. 12 hôpitaux partenaires. Une équipe engagée pour chaque enfant qui doit affronter cette maladie." },
 ];
-
-const ACTIONS = [
-    "Favoriser l'accès au diagnostic précoce et fiable",
-    "Soutenir l'accès à des traitements appropriés",
-    "Réduire les inégalités d'accès aux soins",
-    "Accompagner les enfants et leurs familles",
-    "Prévenir les abandons de traitement",
-    "Renforcer les capacités des structures de santé",
-    "Développer des programmes de sensibilisation",
-    "Établir des partenariats durables nationaux et internationaux",
-];
-
-/* ─── Rainbow watermark SVG ─── */
-function RainbowWatermark() {
-    return (
-        <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style={{ position: "absolute", right: "-5%", top: "50%", transform: "translateY(-55%)", width: "clamp(240px, 55vw, 680px)", opacity: 0.10, pointerEvents: "none" }}
-            className="float-slow">
-            <path d="M 20 340 Q 300 30 580 340" stroke="#D97706" strokeWidth="28" strokeLinecap="round"/>
-            <path d="M 55 340 Q 300 85 545 340" stroke="#DB2777" strokeWidth="28" strokeLinecap="round"/>
-            <path d="M 90 340 Q 300 135 510 340" stroke="#5B21B6" strokeWidth="28" strokeLinecap="round"/>
-        </svg>
-    );
-}
 
 export default async function HomePage() {
     const posts = await listPosts(3);
 
     return (
         <>
-            {/* ── HERO ── */}
-            <section style={{
-                minHeight: "100vh", background: "linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%)",
-                display: "flex", alignItems: "center", position: "relative", overflow: "hidden",
-                marginTop: -92,
-            }}>
-                <RainbowWatermark />
-                <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 70% at 15% 50%, rgba(217,119,6,.07) 0%, transparent 60%)", pointerEvents: "none" }} />
+            {/* ── OUVERTURE ── */}
+            <section className="container split" style={{ paddingTop: "clamp(48px, 8vw, 88px)", paddingBottom: "clamp(72px, 10vw, 104px)", gap: 64, overflowX: "clip" }}>
+                <div style={{ flexBasis: 480 }}>
+                    <span className="eyebrow h-anim">Fondation · Cancer pédiatrique · RDC</span>
+                    <h1 className="display h-anim h-a2" style={{ margin: "8px 0 24px" }}>
+                        Agir pour chaque <em className="accent">enfant</em> qui mérite de vivre
+                    </h1>
+                    <p className="lead h-anim h-a3" style={{ maxWidth: 520, marginBottom: 36 }}>
+                        Le cancer pédiatrique est souvent diagnostiqué trop tard en RDC. La Fondation Eliana œuvre pour changer cela, pour nos enfants, pour leur avenir.
+                    </p>
+                    <div className="h-anim h-a4" style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                        <Link href="/don" className="btn btn-primary">Faire un don</Link>
+                        <Link href="/#histoire" className="btn btn-outline">Notre histoire <IconArrow size={16} /></Link>
+                    </div>
+                </div>
 
-                <div className="container" style={{ position: "relative", zIndex: 1, padding: "clamp(100px, 14vw, 160px) clamp(20px, 5vw, 72px) clamp(80px, 10vw, 120px)" }}>
-                    <div className="grid-hero" style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: "clamp(48px, 7vw, 96px)", alignItems: "center" }}>
-
-                        {/* Left */}
-                        <div>
-                            <div className="h-anim h-a1" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "7px 16px", borderRadius: 100, border: "1px solid rgba(217,119,6,.4)", background: "rgba(217,119,6,.1)", marginBottom: 28 }}>
-                                <IconRainbowBrand size={18} />
-                                <span style={{ fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)" }}>Fondation · Cancer pédiatrique · RDC</span>
-                            </div>
-
-                            <h1 className="h-anim h-a2" style={{ fontSize: "clamp(2.8rem, 5.5vw, 4.8rem)", color: "#fff", lineHeight: 1.08, marginBottom: 22 }}>
-                                Agir pour chaque{" "}
-                                <span style={{ fontStyle: "italic", color: "var(--gold)" }}>enfant</span><br />
-                                <span className="font-script" style={{ fontSize: "1.06em", color: "rgba(255,255,255,.85)" }}>qui mérite de vivre</span>
-                            </h1>
-
-                            <p className="h-anim h-a3" style={{ color: "rgba(255,255,255,.68)", fontSize: "1.02rem", lineHeight: 1.9, maxWidth: 480, marginBottom: 40 }}>
-                                Le cancer pédiatrique est souvent diagnostiqué trop tard en RDC. La Fondation Eliana œuvre pour changer cela — pour nos enfants, pour leur avenir.
-                            </p>
-
-                            <div className="h-anim h-a4" style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-                                <Link href="/don" className="btn btn-gold">
-                                    <IconHeart size={15} color="#fff" />
-                                    Faire un don
-                                </Link>
-                                <Link href="/#histoire" className="btn btn-outline-white">
-                                    Notre histoire
-                                    <IconArrow size={14} color="#fff" />
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Right — photo + stat card */}
-                        <div className="h-anim h-a5 hide-mobile" style={{ position: "relative" }}>
-                            <div className="photo-slot" style={{ aspectRatio: "4/5", borderRadius: 24, overflow: "hidden", boxShadow: "0 40px 80px rgba(0,0,0,.4)" }}>
-                                <img src="https://picsum.photos/seed/eliana-hero/800/1000" alt="Enfants soutenus par la Fondation Eliana" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                            </div>
-                            {/* Floating stat card */}
-                            <div style={{
-                                position: "absolute", bottom: -20, left: -32,
-                                background: "#fff", borderRadius: 18,
-                                padding: "18px 26px",
-                                boxShadow: "0 24px 64px rgba(0,0,0,.2)",
-                                minWidth: 190,
-                            }}>
-                                <p style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Enfants accompagnés</p>
-                                <p style={{ fontSize: "2.4rem", fontWeight: 800, color: "var(--navy)", fontFamily: "var(--font-serif)", lineHeight: 1 }}>340+</p>
-                                <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: 6 }}>depuis 2023 en RDC</p>
-                            </div>
+                <div className="h-anim h-a3" style={{ flexBasis: 380, display: "flex", justifyContent: "center" }}>
+                    <div style={{ position: "relative", width: "100%", maxWidth: 440, paddingTop: 32 }}>
+                        <svg viewBox="0 0 504 284" fill="none" aria-hidden="true" style={{ position: "absolute", top: 0, left: -32, width: "calc(100% + 64px)" }}>
+                            <path d="M20 252a232 232 0 0 1 464 0" stroke="var(--sky)" strokeWidth="2.5" strokeLinecap="round" />
+                            <path d="M12 252a240 240 0 0 1 480 0" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
+                            <path d="M4 252a248 248 0 0 1 496 0" stroke="var(--sun)" strokeWidth="2.5" strokeLinecap="round" />
+                        </svg>
+                        <Photo className="arch" alt="Enfants accompagnés par la Fondation Eliana" label="Photo à venir" />
+                        <div style={{ position: "absolute", left: 16, bottom: 40, background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 16, padding: "16px 22px", boxShadow: "0 18px 40px rgba(20,33,61,.12)" }}>
+                            <p style={{ fontFamily: "var(--font-serif)", fontSize: 40, lineHeight: 1 }}>340+</p>
+                            <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>enfants accompagnés depuis 2023</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* ── STATS BAND ── */}
-            <section style={{ background: "var(--navy-deep)", padding: "clamp(40px, 6vw, 64px) 0" }}>
-                <div className="container">
-                    <div className="grid-4">
-                        {STATS.map((s, i) => (
-                            <div key={i} data-sr className={i < 3 ? "stat-border-r" : ""} style={{
-                                textAlign: "center", padding: "8px 16px",
-                                borderRight: i < 3 ? "1px solid rgba(255,255,255,.08)" : "none",
-                            }}>
-                                <p style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800, color: "var(--gold)", fontFamily: "var(--font-serif)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{s.num}</p>
-                                <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,.5)", marginTop: 8, lineHeight: 1.4 }}>{s.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ── 4 PILIERS ── */}
-            <section id="mission" className="section" style={{ background: "#fff" }}>
-                <div className="container">
-                    <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 64px" }}>
-                        <span className="section-label" data-sr>Nos Engagements</span>
-                        <h2 data-sr style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.8rem)", color: "var(--navy)", marginBottom: 16 }}>Quatre piliers d&apos;action</h2>
-                        <div className="divider divider-center" data-sr />
-                        <p data-sr style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.9 }}>
-                            La Fondation Eliana agit sur quatre axes fondamentaux pour améliorer la prise en charge du cancer pédiatrique en République Démocratique du Congo.
-                        </p>
-                    </div>
-                    <div className="grid-4">
-                        {PILLARS.map(p => (
-                            <div key={p.title} className="action-card" data-sr style={{ textAlign: "center" }}>
-                                <div style={{ width: 58, height: 58, borderRadius: 16, background: p.bg, border: `1px solid ${p.border}`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-                                    <p.Icon size={26} color={p.color} />
-                                </div>
-                                <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--navy)", marginBottom: 10, fontFamily: "var(--font-serif)" }}>{p.title}</h3>
-                                <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.8 }}>{p.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ── HISTOIRE + TIMELINE ── */}
-            <section id="histoire" className="section" style={{ background: "var(--beige)" }}>
-                <div className="container">
-                    <div className="grid-2" style={{ gap: "clamp(48px, 7vw, 96px)", alignItems: "start" }}>
-
-                        {/* Photo */}
-                        <div data-sr>
-                            <div className="photo-slot" style={{ aspectRatio: "4/5", borderRadius: 24, overflow: "hidden", boxShadow: "0 32px 72px rgba(30,58,95,.12)" }}>
-                                <img src="https://picsum.photos/seed/eliana-histoire/800/1000" alt="Histoire de la Fondation Eliana" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                            </div>
+            {/* ── CHIFFRES ── */}
+            <section aria-label="La fondation en chiffres" className="bg-surface" style={{ borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+                <div className="container stats" style={{ paddingTop: 32, paddingBottom: 32 }}>
+                    {STATS.map(s => (
+                        <div key={s.label} className="stat" data-sr>
+                            <p style={{ fontFamily: "var(--font-serif)", fontSize: 52, lineHeight: 1 }}>{s.num}</p>
+                            <p className="muted" style={{ fontSize: 15, marginTop: 10 }}>{s.label}</p>
                         </div>
+                    ))}
+                </div>
+            </section>
 
-                        {/* Timeline */}
-                        <div data-sr>
-                            <span className="section-label">Notre Histoire</span>
-                            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "var(--navy)", marginBottom: 16 }}>
-                                Née de l&apos;amour,<br />
-                                <span className="font-script" style={{ color: "var(--purple)", fontSize: "1.12em" }}>du courage et de la force</span>
-                            </h2>
-                            <div className="divider" />
-                            <p style={{ color: "var(--muted)", lineHeight: 1.9, marginBottom: 40, fontSize: "0.92rem" }}>
+            {/* ── MISSION ── */}
+            <section id="mission" className="container section">
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px 64px", marginBottom: 64 }}>
+                    <div data-sr style={{ flex: "1 1 420px" }}>
+                        <span className="eyebrow">Nos engagements</span>
+                        <h2 className="h2">Quatre piliers d&apos;action</h2>
+                    </div>
+                    <p className="muted" data-sr style={{ flex: "1 1 380px", maxWidth: 480 }}>
+                        La Fondation Eliana agit sur quatre axes fondamentaux pour améliorer la prise en charge du cancer pédiatrique en République Démocratique du Congo.
+                    </p>
+                </div>
+                <div className="pillars">
+                    {PILLARS.map((p, i) => (
+                        <div key={p.title} className="pillar" data-sr>
+                            <p style={{ fontSize: 14, fontWeight: 600, color: "var(--accent-strong)" }}>{String(i + 1).padStart(2, "0")}</p>
+                            <h3 style={{ fontSize: 27, fontWeight: 500, lineHeight: 1.2, margin: "10px 0" }}>{p.title}</h3>
+                            <p className="muted" style={{ fontSize: 16, marginBottom: 20 }}>{p.desc}</p>
+                            <ul className="dots">{p.actions.map(a => <li key={a}>{a}</li>)}</ul>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ── HISTOIRE ── */}
+            <section id="histoire" className="bg-surface">
+                <div className="container section">
+                    <div className="split">
+                        <div data-sr style={{ flexBasis: 440 }}>
+                            <span className="eyebrow">Notre histoire</span>
+                            <h2 className="h2" style={{ marginBottom: 24 }}>Née de l&apos;amour, <em className="accent">du courage et de la force</em></h2>
+                            <p className="muted" style={{ maxWidth: 520 }}>
                                 Inspirée par la force d&apos;Eliana et de ces nombreux enfants qui luttent chaque jour, la fondation contribue à l&apos;amélioration de la prise en charge des cancers pédiatriques en RDC.
                             </p>
-
-                            <div className="timeline">
-                                {TIMELINE.map((item, i) => (
-                                    <div key={i} className="timeline-item">
-                                        <div className="timeline-dot">
-                                            {i === TIMELINE.length - 1
-                                                ? <IconHeart size={15} color="var(--gold)" />
-                                                : <IconButterfly size={15} color="var(--gold)" />
-                                            }
-                                        </div>
-                                        <div style={{ flex: 1, paddingTop: 6 }}>
-                                            <span style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--gold)", display: "block", marginBottom: 4 }}>{item.year}</span>
-                                            <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--navy)", marginBottom: 6, fontFamily: "var(--font-serif)" }}>{item.title}</h3>
-                                            <p style={{ fontSize: "0.82rem", color: "var(--muted)", lineHeight: 1.75 }}>{item.text}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
                         </div>
+                        <Photo alt="Histoire de la Fondation Eliana" label="Photo à venir" style={{ flexBasis: 380, aspectRatio: "4 / 3" }} />
                     </div>
-                </div>
-            </section>
-
-            {/* ── 8 ACTIONS ── */}
-            <section id="actions" className="section" style={{ background: "#fff" }}>
-                <div className="container">
-                    <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 64px" }}>
-                        <span className="section-label" data-sr>Nos Actions</span>
-                        <h2 data-sr style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.8rem)", color: "var(--navy)" }}>Ce que nous faisons,<br /><span className="font-script" style={{ color: "var(--purple)", fontSize: "1.06em" }}>concrètement</span></h2>
-                        <div className="divider divider-center" data-sr />
-                    </div>
-                    <div className="grid-4" style={{ gap: "clamp(12px, 2vw, 20px)" }}>
-                        {ACTIONS.map((a, i) => (
-                            <div key={i} data-sr style={{
-                                padding: "24px 22px", borderRadius: 16,
-                                background: i % 2 === 0 ? "var(--beige)" : "#fff",
-                                border: "1px solid var(--border)",
-                                display: "flex", gap: 14, alignItems: "flex-start",
-                            }}>
-                                <div style={{
-                                    width: 28, height: 28, borderRadius: "50%", flexShrink: 0,
-                                    background: "var(--navy-deep)", display: "flex", alignItems: "center", justifyContent: "center",
-                                }}>
-                                    <IconCheck size={13} color="#fff" />
-                                </div>
-                                <p style={{ fontSize: "0.85rem", color: "var(--navy)", lineHeight: 1.7, fontWeight: 500 }}>{a}</p>
-                            </div>
+                    <ol className="timeline" style={{ marginTop: 80 }}>
+                        {TIMELINE.map(t => (
+                            <li key={t.year} data-sr>
+                                <p style={{ fontFamily: "var(--font-serif)", fontSize: 30, lineHeight: 1 }}>{t.year}</p>
+                                <p style={{ fontWeight: 600, fontSize: 16, margin: "12px 0 6px" }}>{t.title}</p>
+                                <p className="muted" style={{ fontSize: 15 }}>{t.text}</p>
+                            </li>
                         ))}
-                    </div>
-                    <div style={{ textAlign: "center", marginTop: 48 }}>
-                        <Link href="/don" className="btn btn-gold">
-                            <IconHeart size={15} color="#fff" />
-                            Soutenir nos actions
-                        </Link>
-                    </div>
+                    </ol>
                 </div>
             </section>
 
             {/* ── SYMBOLES ── */}
-            <section className="section-sm" style={{ background: "var(--beige)" }}>
-                <div className="container">
-                    <div style={{ textAlign: "center", marginBottom: 52 }}>
-                        <span className="section-label" data-sr>Nos Symboles</span>
-                        <h2 data-sr style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)", color: "var(--navy)" }}>L&apos;espoir et la transformation</h2>
+            <section className="bg-tint">
+                <div className="container section">
+                    <div style={{ textAlign: "center", marginBottom: 56 }} data-sr>
+                        <span className="eyebrow" style={{ color: "var(--ink)" }}>Nos symboles</span>
+                        <h2 className="h2">L&apos;espoir et la transformation</h2>
                     </div>
-                    <div className="grid-2">
-                        <div data-sr style={{ padding: "clamp(24px,5vw,44px) clamp(20px,5vw,40px)", borderRadius: 24, background: "#fff", border: "1px solid var(--border)", textAlign: "center" }}>
-                            <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
-                                <svg viewBox="0 0 120 76" fill="none" width="120" className="float-slow">
-                                    <path d="M 6 68 Q 60 6 114 68" stroke="#D97706" strokeWidth="10" strokeLinecap="round"/>
-                                    <path d="M 16 68 Q 60 22 104 68" stroke="#DB2777" strokeWidth="10" strokeLinecap="round"/>
-                                    <path d="M 26 68 Q 60 36 94 68" stroke="#5B21B6" strokeWidth="10" strokeLinecap="round"/>
-                                </svg>
-                            </div>
-                            <h3 style={{ fontSize: "1.3rem", color: "var(--navy)", marginBottom: 14 }}>L&apos;arc-en-ciel</h3>
-                            <p style={{ color: "var(--muted)", lineHeight: 1.9, fontSize: "0.9rem" }}>
-                                L&apos;arc-en-ciel représente l&apos;espoir après la tempête. Il rappelle que même dans les moments les plus sombres, la lumière peut revenir. Il symbolise la résilience et la promesse que l&apos;espoir brille toujours.
-                            </p>
-                        </div>
-                        <div data-sr style={{ padding: "clamp(24px,5vw,44px) clamp(20px,5vw,40px)", borderRadius: 24, background: "#fff", border: "1px solid var(--border)", textAlign: "center" }}>
-                            <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
-                                <IconButterfly size={80} color="#1E3A5F" className="float" />
-                            </div>
-                            <h3 style={{ fontSize: "1.3rem", color: "var(--navy)", marginBottom: 14 }}>Le papillon bleu</h3>
-                            <p style={{ color: "var(--muted)", lineHeight: 1.9, fontSize: "0.9rem" }}>
-                                Le papillon bleu symbolise la transformation, la liberté et l&apos;esprit délicat mais puissant d&apos;un enfant. Il représente l&apos;esprit doux d&apos;Eliana et l&apos;empreinte durable qu&apos;elle laisse dans nos cœurs.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ── HOMMAGE ── */}
-            <section id="hommage" className="section" style={{
-                background: "linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%)",
-                color: "#fff", position: "relative", overflow: "hidden",
-            }}>
-                <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(ellipse 50% 60% at 15% 50%, rgba(217,119,6,.1) 0%, transparent 55%), radial-gradient(ellipse 40% 50% at 85% 30%, rgba(91,33,182,.15) 0%, transparent 55%)", pointerEvents: "none" }} />
-
-                <div className="container" style={{ position: "relative", zIndex: 1 }}>
-                    <div className="grid-hommage" style={{ display: "grid", gridTemplateColumns: "480px 1fr", gap: "clamp(48px, 7vw, 96px)", alignItems: "center" }}>
-
-                        {/* Photo */}
-                        <div data-sr style={{ position: "relative" }}>
-                            <div className="photo-slot" style={{ aspectRatio: "3/4", borderRadius: 24, overflow: "hidden", boxShadow: "0 40px 80px rgba(0,0,0,.4)" }}>
-                                <img src="https://picsum.photos/seed/eliana-hommage/700/900" alt="Hommage à Eliana" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 45%, rgba(15,37,64,.6) 100%)" }} />
-                            </div>
-                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 20 }}>
-                                {["Pour nos enfants", "Pour leur avenir", "Pour la RDC"].map(t => (
-                                    <span key={t} style={{ padding: "6px 14px", borderRadius: 100, border: "1px solid rgba(255,255,255,.2)", color: "rgba(255,255,255,.6)", fontSize: "0.72rem" }}>{t}</span>
-                                ))}
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 24 }}>
+                        <div className="card" data-sr style={{ flex: "1 1 420px", border: 0, display: "flex", flexWrap: "wrap", gap: "24px 32px", alignItems: "flex-start" }}>
+                            <svg width="104" height="60" viewBox="0 0 104 60" fill="none" aria-hidden="true" style={{ flex: "none" }}>
+                                <path d="M6 56a46 46 0 0 1 92 0" stroke="var(--sun)" strokeWidth="7" strokeLinecap="round" />
+                                <path d="M17 56a35 35 0 0 1 70 0" stroke="var(--accent)" strokeWidth="7" strokeLinecap="round" />
+                                <path d="M28 56a24 24 0 0 1 48 0" stroke="#9B86D9" strokeWidth="7" strokeLinecap="round" />
+                                <path d="M39 56a13 13 0 0 1 26 0" stroke="var(--sky)" strokeWidth="7" strokeLinecap="round" />
+                            </svg>
+                            <div style={{ flex: "1 1 240px" }}>
+                                <h3 style={{ fontSize: 30, fontWeight: 500, marginBottom: 12 }}>L&apos;arc-en-ciel</h3>
+                                <p className="muted" style={{ fontSize: 16 }}>
+                                    L&apos;arc-en-ciel représente l&apos;espoir après la tempête. Il rappelle que même dans les moments les plus sombres, la lumière peut revenir. Il symbolise la résilience et la promesse que l&apos;espoir brille toujours.
+                                </p>
                             </div>
                         </div>
-
-                        {/* Text */}
-                        <div data-sr>
-                            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
-                                <IconButterfly size={32} color="rgba(255,255,255,.4)" />
-                                <span style={{ fontSize: "0.62rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>Hommage</span>
-                            </div>
-                            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", color: "#fff", lineHeight: 1.12, marginBottom: 24 }}>
-                                À Eliana,{" "}
-                                <span className="font-script" style={{ color: "var(--gold)", fontSize: "1.08em" }}>notre petite princesse</span>
-                            </h2>
-                            <div className="divider divider-white" />
-                            <p style={{ color: "rgba(255,255,255,.7)", fontSize: "0.95rem", lineHeight: 2, marginBottom: 20 }}>
-                                Cette fondation est dédiée à <strong style={{ color: "#fff" }}>Eliana</strong>, qui a lutté pendant six ans contre un neuroblastome métastatique. Elle représente le courage de tous ces enfants qui affrontent la maladie malgré eux.
-                            </p>
-                            <p style={{ color: "rgba(255,255,255,.7)", fontSize: "0.95rem", lineHeight: 2, marginBottom: 36 }}>
-                                Eliana apportait de la couleur, de la joie et de la lumière. Cette petite princesse aimait les arcs-en-ciel, les papillons bleus, danser librement et peindre avec imagination.
-                            </p>
-                            <div style={{ padding: "24px 32px", background: "rgba(255,255,255,.06)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 18 }}>
-                                <p className="font-serif" style={{ fontStyle: "italic", fontSize: "1.1rem", color: "var(--gold)", lineHeight: 1.8 }}>
-                                    &ldquo;Que chaque enfant que nous aidons porte en lui la même lumière, la même force et les mêmes couleurs.&rdquo;
+                        <div className="card" data-sr style={{ flex: "1 1 420px", border: 0, display: "flex", flexWrap: "wrap", gap: "24px 32px", alignItems: "flex-start" }}>
+                            <IconButterfly size={104} color="var(--ink)" fill="var(--sky)" />
+                            <div style={{ flex: "1 1 240px" }}>
+                                <h3 style={{ fontSize: 30, fontWeight: 500, marginBottom: 12 }}>Le papillon bleu</h3>
+                                <p className="muted" style={{ fontSize: 16 }}>
+                                    Le papillon bleu symbolise la transformation, la liberté et l&apos;esprit délicat mais puissant d&apos;un enfant. Il représente l&apos;esprit doux d&apos;Eliana et l&apos;empreinte durable qu&apos;elle laisse dans nos cœurs.
                                 </p>
                             </div>
                         </div>
@@ -330,70 +168,50 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            {/* ── BLOG PREVIEW ── */}
-            {posts.length > 0 && (
-                <section className="section" style={{ background: "var(--surface)" }}>
-                    <div className="container">
-                        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 56, flexWrap: "wrap", gap: 20 }}>
-                            <div>
-                                <span className="section-label" data-sr>Actualités</span>
-                                <h2 data-sr style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "var(--navy)" }}>Dernières nouvelles</h2>
-                            </div>
-                            <Link href="/actualites" className="btn btn-outline" data-sr style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                                Toutes les actualités <IconArrow size={14} color="var(--navy)" />
-                            </Link>
-                        </div>
-                        <div className="grid-3">
-                            {posts.map(post => (
-                                <Link key={post.id} href={`/actualites/${post.slug}`} className="card blog-card" style={{ display: "flex", flexDirection: "column" }}>
-                                    <div className="blog-card-img photo-slot">
-                                        {post.cover_url && <img src={post.cover_url} alt={post.title} />}
-                                    </div>
-                                    <div className="blog-card-body">
-                                        {post.tags[0] && <span className="tag tag-gold">{post.tags[0]}</span>}
-                                        <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", fontWeight: 700, color: "var(--navy)", lineHeight: 1.4 }}>{post.title}</h3>
-                                        {post.excerpt && <p style={{ fontSize: "0.84rem", color: "var(--muted)", lineHeight: 1.75, flex: 1 }}>{post.excerpt}</p>}
-                                        <p style={{ fontSize: "0.72rem", color: "var(--muted-light)" }}>{postDate(post)}</p>
-                                    </div>
-                                </Link>
+            {/* ── HOMMAGE ── */}
+            <section id="hommage" className="night">
+                <div className="container section split" style={{ gap: "56px 80px" }}>
+                    <div data-sr style={{ flexBasis: 340, display: "flex", justifyContent: "center" }}>
+                        <Photo className="arch" alt="Eliana" label="Photo à venir" style={{ width: "100%", maxWidth: 400, background: "var(--night-2)", color: "var(--on-night)" }} />
+                    </div>
+                    <div data-sr style={{ flexBasis: 460 }}>
+                        <span className="eyebrow">Hommage</span>
+                        <h2 className="h2" style={{ marginBottom: 28 }}>À Eliana, <em style={{ color: "var(--accent-night)" }}>notre petite princesse</em></h2>
+                        <p style={{ marginBottom: 18 }}>
+                            Cette fondation est dédiée à <strong style={{ color: "#fff", fontWeight: 600 }}>Eliana</strong>, qui a lutté pendant six ans contre un neuroblastome métastatique. Elle représente le courage de tous ces enfants qui affrontent la maladie malgré eux.
+                        </p>
+                        <p>
+                            Eliana apportait de la couleur, de la joie et de la lumière. Cette petite princesse aimait les arcs-en-ciel, les papillons bleus, danser librement et peindre avec imagination.
+                        </p>
+                        <blockquote style={{ marginTop: 40, paddingTop: 28, borderTop: "1px solid rgba(250,248,245,.2)", fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: 26, lineHeight: 1.4 }}>
+                            « Que chaque enfant que nous aidons porte en lui la même lumière, la même force et les mêmes couleurs. »
+                        </blockquote>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 32 }}>
+                            {["Pour nos enfants", "Pour leur avenir", "Pour la RDC"].map(t => (
+                                <span key={t} style={{ padding: "6px 14px", borderRadius: 999, border: "1px solid rgba(250,248,245,.28)", fontSize: 13, color: "var(--on-night)" }}>{t}</span>
                             ))}
                         </div>
                     </div>
+                </div>
+            </section>
+
+            {/* ── ACTUALITÉS ── */}
+            {posts.length > 0 && (
+                <section className="container section">
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 20, marginBottom: 48 }}>
+                        <div data-sr>
+                            <span className="eyebrow">Actualités</span>
+                            <h2 className="h2">Dernières nouvelles</h2>
+                        </div>
+                        <Link href="/actualites" className="link-arrow">Toutes les actualités <IconArrow size={16} /></Link>
+                    </div>
+                    <div className="cards">{posts.map(p => <PostCard key={p.id} post={p} />)}</div>
                 </section>
             )}
 
-            {/* ── CTA FINAL ── */}
-            <section className="section" style={{ background: "var(--navy-deep)", textAlign: "center", position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(ellipse 60% 70% at 50% 100%, rgba(217,119,6,.12) 0%, transparent 60%)", pointerEvents: "none" }} />
-                <div className="container-xs" style={{ position: "relative", zIndex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "center", gap: 24, marginBottom: 36 }}>
-                        <div className="float-slow">
-                            <svg viewBox="0 0 120 76" fill="none" width="96">
-                                <path d="M 6 68 Q 60 6 114 68" stroke="#D97706" strokeWidth="8" strokeLinecap="round" opacity="0.7"/>
-                                <path d="M 16 68 Q 60 22 104 68" stroke="#DB2777" strokeWidth="8" strokeLinecap="round" opacity="0.7"/>
-                                <path d="M 26 68 Q 60 36 94 68" stroke="#5B21B6" strokeWidth="8" strokeLinecap="round" opacity="0.7"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <h2 data-sr style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)", color: "#fff", marginBottom: 20 }}>
-                        Ensemble, faisons une<br />
-                        <span className="font-script" style={{ color: "var(--gold)", fontSize: "1.1em" }}>réelle différence</span>
-                    </h2>
-                    <p data-sr style={{ color: "rgba(255,255,255,.6)", fontSize: "1rem", lineHeight: 1.9, marginBottom: 40 }}>
-                        Chaque geste compte. Soutenez la Fondation Eliana dans sa mission de lutte contre le cancer pédiatrique en RDC.
-                    </p>
-                    <div data-sr style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-                        <Link href="/don" className="btn btn-gold">
-                            <IconHeart size={15} color="#fff" />
-                            Faire un don
-                        </Link>
-                        <Link href="/contact" className="btn btn-outline-white">
-                            Nous contacter
-                            <IconArrow size={14} color="#fff" />
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <div style={{ paddingTop: posts.length > 0 ? 0 : "clamp(72px, 10vw, 112px)" }}>
+                <DonCta />
+            </div>
         </>
     );
 }

@@ -84,18 +84,17 @@ export function IconRainbow({ size = 24, color = "currentColor", style, classNam
     );
 }
 
-export function IconButterfly({ size = 24, color = "currentColor", style, className }: IconProps) {
+/** Le papillon bleu d'Eliana : contour `color`, ailes remplies de `fill` (aucun remplissage par défaut). */
+export function IconButterfly({ size = 24, color = "currentColor", fill = "none", style, className }: IconProps & { fill?: string }) {
     return (
-        <svg viewBox="0 0 24 24" fill="none" style={{ ...base(size), ...style }} className={className}>
-            <path d="M12 12C10 8 5 4 3 6c-2 2 1 7 4 8 1.5.5 3.5.5 5 0" fill={color} opacity="0.2"/>
-            <path d="M12 12C14 8 19 4 21 6c2 2-1 7-4 8-1.5.5-3.5.5-5 0" fill={color} opacity="0.2"/>
-            <path d="M12 12C10 16 5 20 3 18c-2-2 1-7 4-8 1.5-.5 3.5-.5 5 0" fill={color} opacity="0.3"/>
-            <path d="M12 12C14 16 19 20 21 18c2-2-1-7-4-8-1.5-.5-3.5-.5-5 0" fill={color} opacity="0.3"/>
-            <path d="M12 12C10 8 5 4 3 6c-2 2 1 7 4 8 1.5.5 3.5.5 5 0" stroke={color} strokeWidth="1.2" strokeLinejoin="round"/>
-            <path d="M12 12C14 8 19 4 21 6c2 2-1 7-4 8-1.5.5-3.5.5-5 0" stroke={color} strokeWidth="1.2" strokeLinejoin="round"/>
-            <path d="M12 12C10 16 5 20 3 18c-2-2 1-7 4-8 1.5-.5 3.5-.5 5 0" stroke={color} strokeWidth="1.2" strokeLinejoin="round"/>
-            <path d="M12 12C14 16 19 20 21 18c2-2-1-7-4-8-1.5-.5-3.5-.5-5 0" stroke={color} strokeWidth="1.2" strokeLinejoin="round"/>
-            <line x1="12" y1="8" x2="12" y2="16" stroke={color} strokeWidth="1.2" strokeLinecap="round"/>
+        <svg viewBox="0 0 64 52" fill="none" aria-hidden="true" style={{ ...base(size), ...style }} className={className}>
+            <g stroke={color} strokeWidth="1.6" strokeLinejoin="round" fill={fill}>
+                <path d="M32 22C24 6 8 2 6 12s12 14 26 12Z"/>
+                <path d="M32 22C40 6 56 2 58 12s-12 14-26 12Z"/>
+                <path d="M32 26c-10 0-20 6-18 14s14 2 18-10Z" fillOpacity="0.55"/>
+                <path d="M32 26c10 0 20 6 18 14s-14 2-18-10Z" fillOpacity="0.55"/>
+            </g>
+            <path d="M32 12v26M31 12c-2-5-5-7-8-8M33 12c2-5 5-7 8-8" stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
         </svg>
     );
 }
@@ -185,13 +184,13 @@ export function IconCheck({ size = 20, color = "currentColor", style, className 
     );
 }
 
-/* Brand rainbow : 3 arcs épais gold / pink / purple */
-export function IconRainbowBrand({ size = 24, style, className }: IconProps) {
+/** Signature de la fondation : trois arcs (soleil, accent, ciel). */
+export function IconRainbowBrand({ size = 40, style, className }: IconProps) {
     return (
-        <svg viewBox="0 0 36 22" fill="none" style={{ ...base(size), ...style }} className={className}>
-            <path d="M2 20 Q18 2 34 20" stroke="#D97706" strokeWidth="3.5" strokeLinecap="round"/>
-            <path d="M5.5 20 Q18 6.5 30.5 20" stroke="#DB2777" strokeWidth="3.5" strokeLinecap="round"/>
-            <path d="M9 20 Q18 11 27 20" stroke="#5B21B6" strokeWidth="3.5" strokeLinecap="round"/>
+        <svg viewBox="0 0 40 24" fill="none" aria-hidden="true" style={{ width: size, height: size * 0.6, flexShrink: 0, ...style }} className={className}>
+            <path d="M3 22a17 17 0 0 1 34 0" stroke="var(--sun)" strokeWidth="3" strokeLinecap="round"/>
+            <path d="M8.5 22a11.5 11.5 0 0 1 23 0" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round"/>
+            <path d="M14 22a6 6 0 0 1 12 0" stroke="var(--sky)" strokeWidth="3" strokeLinecap="round"/>
         </svg>
     );
 }
