@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 // Aperçu des liens partagés (WhatsApp, Facebook, LinkedIn…), généré au build. Les articles avec une couverture la gardent.
-export const alt = "Fondation Eliana — Ensemble contre le cancer pédiatrique en RDC";
+export const alt = "Eliana Foundation — Ensemble contre le cancer pédiatrique en RDC";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -19,8 +19,8 @@ async function googleFont(family: string, text: string) {
 }
 
 export default async function Image() {
-    // Les polices du logo : Newsreader italique pour « Eliana », Figtree pour « FONDATION ».
-    const [serifFont, sansFont] = await Promise.all([googleFont("Newsreader:ital@1", `Eliana${TAGLINE}`), googleFont("Figtree:wght@600", "FONDATION")]);
+    // Les polices du logo : Newsreader italique pour « Eliana », Figtree pour « FOUNDATION ».
+    const [serifFont, sansFont] = await Promise.all([googleFont("Newsreader:ital@1", `Eliana${TAGLINE}`), googleFont("Figtree:wght@600", "FOUNDATION")]);
     const serif = serifFont ? "Newsreader" : undefined;
     return new ImageResponse(
         (
@@ -31,7 +31,7 @@ export default async function Image() {
                     <path d="M12 23a4 4 0 0 1 8 0" stroke="#5E95E6" strokeWidth="3.5" strokeLinecap="round" />
                 </svg>
                 <div style={{ fontFamily: serif, fontStyle: "italic", fontSize: 150, lineHeight: 1, marginTop: -20 }}>Eliana</div>
-                <div style={{ fontFamily: sansFont ? "Figtree" : undefined, fontSize: 26, fontWeight: 600, letterSpacing: "0.3em", color: "#5A6478", marginTop: 18 }}>FONDATION</div>
+                <div style={{ fontFamily: sansFont ? "Figtree" : undefined, fontSize: 26, fontWeight: 600, letterSpacing: "0.3em", color: "#5A6478", marginTop: 18 }}>FOUNDATION</div>
                 <div style={{ fontFamily: serif, fontStyle: "italic", fontSize: 48, color: "#B0512B", marginTop: 56 }}>{TAGLINE}</div>
             </div>
         ),

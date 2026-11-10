@@ -12,7 +12,7 @@ const FAQ = [
     },
     {
         q: "Mes dons sont-ils déductibles des impôts ?",
-        a: "La Fondation Eliana est reconnue d'utilité publique, ce qui permet à nos donateurs de bénéficier d'une réduction fiscale. Un reçu fiscal vous est automatiquement envoyé par email après chaque don.",
+        a: "Eliana Foundation est reconnue d'utilité publique, ce qui permet à nos donateurs de bénéficier d'une réduction fiscale. Un reçu fiscal vous est automatiquement envoyé par email après chaque don.",
     },
     {
         q: "Comment la fondation utilise-t-elle les fonds reçus ?",
@@ -77,7 +77,7 @@ export default function ContactPage() {
                             <div style={{ textAlign: "center", padding: "24px 0" }} role="status">
                                 <IconButterfly size={64} color="var(--ink)" fill="var(--sky)" />
                                 <h2 style={{ fontSize: 34, margin: "20px 0 12px" }}>Message envoyé</h2>
-                                <p className="muted">Nous vous répondrons dans les 48h. Merci pour votre intérêt pour la Fondation Eliana.</p>
+                                <p className="muted">Nous vous répondrons dans les 48h. Merci pour votre intérêt pour Eliana Foundation.</p>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>

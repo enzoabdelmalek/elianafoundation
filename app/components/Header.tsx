@@ -28,7 +28,7 @@ export default function Header() {
     return (
         <header style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--ground)", borderBottom: "1px solid var(--line)" }}>
             <div className="container" style={{ minHeight: 76, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-                <Link href="/" onClick={close} aria-label="Fondation Eliana, accueil"><Logo /></Link>
+                <Link href="/" onClick={close} aria-label="Eliana Foundation, accueil"><Logo /></Link>
 
                 <nav aria-label="Navigation principale" className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: 28 }}>
                     {navLinks.map(l => (

@@ -4,8 +4,8 @@ import { CONTACT_EMAIL, fullAddress, getProfile } from "@/lib/profile";
 export const revalidate = 3600;
 
 export const metadata = {
-    title: "Politique de confidentialité — Fondation Eliana",
-    description: "Données recueillies par le site de la Fondation Eliana, leur utilisation et vos droits.",
+    title: "Politique de confidentialité — Eliana Foundation",
+    description: "Données recueillies par le site d'Eliana Foundation, leur utilisation et vos droits.",
 };
 
 // Texte des sites du monorepo (@vwa/site-kit, privacy.ts) réduit à ce que ce site fait : le formulaire de contact,
@@ -13,7 +13,7 @@ export const metadata = {
 export default async function ConfidentialitePage() {
     const profile = await getProfile();
     const legalName = profile?.legal?.legal_name?.trim();
-    const owner = legalName && legalName.toLowerCase() !== "fondation eliana" ? `${legalName} (Fondation Eliana)` : "Fondation Eliana";
+    const owner = legalName && legalName.toLowerCase() !== "eliana foundation" ? `${legalName} (Eliana Foundation)` : "Eliana Foundation";
     const address = fullAddress(profile);
     const email = profile?.email ?? CONTACT_EMAIL;
     const mail = <a href={`mailto:${email}`} className="link-hover" style={{ textDecoration: "underline" }}>{email}</a>;
@@ -39,7 +39,7 @@ export default async function ConfidentialitePage() {
             </LegalSection>
             <LegalSection title="Qui y a accès">
                 <ul className="dots">
-                    <li>L&apos;équipe de la Fondation Eliana, dans la limite de ses fonctions.</li>
+                    <li>L&apos;équipe d&apos;Eliana Foundation, dans la limite de ses fonctions.</li>
                     <li>Notre prestataire web, Vibe Web Agency, qui héberge le site et l&apos;outil de gestion pour notre compte (sous-traitant, contrat conforme à l&apos;article 28 du RGPD).</li>
                     <li>Nos hébergeurs : Supabase (base de données, serveurs en Irlande) et Vercel (site, serveurs à Dublin).</li>
                     <li>Notre prestataire d&apos;envoi d&apos;emails (Resend), pour l&apos;accusé de réception de votre message.</li>

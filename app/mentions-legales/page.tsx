@@ -5,8 +5,8 @@ import { CONTACT_EMAIL, fullAddress, getProfile } from "@/lib/profile";
 export const revalidate = 3600;
 
 export const metadata = {
-    title: "Mentions légales — Fondation Eliana",
-    description: "Éditeur, hébergeur et conception du site de la Fondation Eliana.",
+    title: "Mentions légales — Eliana Foundation",
+    description: "Éditeur, hébergeur et conception du site d'Eliana Foundation.",
 };
 
 // Même texte que les sites du monorepo (@vwa/site-kit, legal.ts), adapté à une association : les champs viennent du
@@ -16,7 +16,7 @@ const siretText = (s: string) => (s.length === 14 ? `SIRET : ${s.slice(0, 3)} ${
 export default async function MentionsLegalesPage() {
     const profile = await getProfile();
     const l = profile?.legal ?? {};
-    const name = l.legal_name?.trim() || "Fondation Eliana";
+    const name = l.legal_name?.trim() || "Eliana Foundation";
     const address = fullAddress(profile);
 
     return (
@@ -40,7 +40,7 @@ export default async function MentionsLegalesPage() {
                 <p>Vibe Web Agency · 142 rue de Rivoli, 75001 Paris · <a href="https://vibewebagency.fr" target="_blank" rel="noopener noreferrer" className="link-hover" style={{ textDecoration: "underline" }}>vibewebagency.fr</a></p>
             </LegalSection>
             <LegalSection title="Propriété intellectuelle">
-                <p>Les textes, photos, logos et éléments graphiques de ce site appartiennent à {l.legal_name?.trim() || "la Fondation Eliana"} ou à leurs auteurs. Toute reproduction sans autorisation écrite est interdite.</p>
+                <p>Les textes, photos, logos et éléments graphiques de ce site appartiennent à {l.legal_name?.trim() || "Eliana Foundation"} ou à leurs auteurs. Toute reproduction sans autorisation écrite est interdite.</p>
             </LegalSection>
             <LegalSection title="Données personnelles et cookies">
                 <p>Les données recueillies par ce site, leurs finalités, leurs durées de conservation et vos droits sont décrits dans la <Link href="/confidentialite" className="link-hover" style={{ textDecoration: "underline" }}>politique de confidentialité</Link>.</p>

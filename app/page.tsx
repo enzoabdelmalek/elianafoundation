@@ -32,7 +32,7 @@ const TIMELINE = [
     { year: "2016", title: "Diagnostic à 3 ans",       text: "Eliana reçoit son diagnostic de neuroblastome métastatique. Une famille plongée dans l'incertitude." },
     { year: "2020", title: "Quatre ans de combat",     text: "Traitements, espoir, rechutes. Eliana lutte avec une bravoure et une résilience qui inspirent tous ceux qui l'entourent." },
     { year: "2022", title: "Eliana s'en va",           text: "Après six ans de combat, Eliana nous quitte à l'âge de 9 ans. Ses arcs-en-ciel, ses papillons, sa lumière restent." },
-    { year: "2023", title: "La fondation naît",        text: "Sa famille crée la Fondation Eliana pour transformer sa lumière en actions concrètes en République Démocratique du Congo." },
+    { year: "2023", title: "La fondation naît",        text: "Sa famille crée Eliana Foundation pour transformer sa lumière en actions concrètes en République Démocratique du Congo." },
     { year: "2026", title: "340+ enfants accompagnés", text: "La mission grandit. 12 hôpitaux partenaires. Une équipe engagée pour chaque enfant qui doit affronter cette maladie." },
 ];
 
@@ -49,7 +49,7 @@ export default async function HomePage() {
                         Agir pour chaque <em className="accent">enfant</em> qui mérite de vivre
                     </h1>
                     <p className="lead h-anim h-a3" style={{ maxWidth: 520, marginBottom: 36 }}>
-                        Le cancer pédiatrique est souvent diagnostiqué trop tard en RDC. La Fondation Eliana œuvre pour changer cela, pour nos enfants, pour leur avenir.
+                        Le cancer pédiatrique est souvent diagnostiqué trop tard en RDC. Eliana Foundation œuvre pour changer cela, pour nos enfants, pour leur avenir.
                     </p>
                     <div className="h-anim h-a4" style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                         <Link href="/don" className="btn btn-primary">Faire un don</Link>
@@ -65,7 +65,7 @@ export default async function HomePage() {
                             <path d="M12 252a240 240 0 0 1 480 0" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
                             <path d="M4 252a248 248 0 0 1 496 0" stroke="var(--sun)" strokeWidth="2.5" strokeLinecap="round" />
                         </svg>
-                        <Photo className="arch" alt="Enfants accompagnés par la Fondation Eliana" label="Photo à venir" />
+                        <Photo className="arch" alt="Enfants accompagnés par Eliana Foundation" label="Photo à venir" />
                         <div style={{ position: "absolute", left: 16, bottom: 40, background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 16, padding: "16px 22px", boxShadow: "0 18px 40px rgba(20,33,61,.12)" }}>
                             <p style={{ fontFamily: "var(--font-serif)", fontSize: 40, lineHeight: 1 }}>340+</p>
                             <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>enfants accompagnés depuis 2023</p>
@@ -94,7 +94,7 @@ export default async function HomePage() {
                         <h2 className="h2">Quatre piliers d&apos;action</h2>
                     </div>
                     <p className="muted" data-sr style={{ flex: "1 1 380px", maxWidth: 480 }}>
-                        La Fondation Eliana agit sur quatre axes fondamentaux pour améliorer la prise en charge du cancer pédiatrique en République Démocratique du Congo.
+                        Eliana Foundation agit sur quatre axes fondamentaux pour améliorer la prise en charge du cancer pédiatrique en République Démocratique du Congo.
                     </p>
                 </div>
                 <div className="pillars">
@@ -120,7 +120,7 @@ export default async function HomePage() {
                                 Inspirée par la force d&apos;Eliana et de ces nombreux enfants qui luttent chaque jour, la fondation contribue à l&apos;amélioration de la prise en charge des cancers pédiatriques en RDC.
                             </p>
                         </div>
-                        <Photo alt="Histoire de la Fondation Eliana" label="Photo à venir" style={{ flexBasis: 380, aspectRatio: "4 / 3" }} />
+                        <Photo alt="Histoire d'Eliana Foundation" label="Photo à venir" style={{ flexBasis: 380, aspectRatio: "4 / 3" }} />
                     </div>
                     <ol className="timeline" style={{ marginTop: 80 }}>
                         {TIMELINE.map(t => (

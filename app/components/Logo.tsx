@@ -6,7 +6,7 @@ export default function Logo() {
             <IconRainbowBrand size={40} />
             <span style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}>
                 <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: 27 }}>Eliana</span>
-                <span style={{ fontSize: 10, letterSpacing: "0.3em", fontWeight: 600, color: "var(--muted)", marginTop: 5 }}>FONDATION</span>
+                <span style={{ fontSize: 10, letterSpacing: "0.3em", fontWeight: 600, color: "var(--muted)", marginTop: 5 }}>FOUNDATION</span>
             </span>
         </span>
     );

@@ -11,7 +11,7 @@ export default function DonCta() {
                 <div style={{ position: "relative", maxWidth: 640, margin: "0 auto" }}>
                     <h2 className="h2" style={{ marginBottom: 20 }}>Ensemble, faisons une <em>réelle différence</em></h2>
                     <p style={{ fontSize: 18, color: "rgba(255,255,255,.9)", marginBottom: 36 }}>
-                        Chaque geste compte. Soutenez la Fondation Eliana dans sa mission de lutte contre le cancer pédiatrique en RDC.
+                        Chaque geste compte. Soutenez Eliana Foundation dans sa mission de lutte contre le cancer pédiatrique en RDC.
                     </p>
                     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
                         <Link href="/don" className="btn btn-light">Faire un don</Link>

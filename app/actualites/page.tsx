@@ -8,7 +8,7 @@ import DonCta from "../components/DonCta";
 export const revalidate = 60;
 
 export const metadata = {
-    title: "Actualités — Fondation Eliana",
+    title: "Actualités — Eliana Foundation",
     description: "Actualités, articles de sensibilisation et ressources sur le cancer pédiatrique en RDC.",
 };
 
@@ -24,7 +24,7 @@ export default async function ActualitesPage() {
                     Sensibilisation &amp; <em className="accent">ressources</em>
                 </h1>
                 <p className="lead h-anim h-a3" style={{ maxWidth: 620 }}>
-                    Articles, témoignages et actualités sur le cancer pédiatrique en RDC et les actions de la Fondation Eliana.
+                    Articles, témoignages et actualités sur le cancer pédiatrique en RDC et les actions d&apos;Eliana Foundation.
                 </p>
             </section>
 

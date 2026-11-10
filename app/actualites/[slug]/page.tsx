@@ -11,10 +11,10 @@ export const revalidate = 60;
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const post = await findPost(slug);
-    if (!post) return { title: "Article introuvable — Fondation Eliana" };
+    if (!post) return { title: "Article introuvable — Eliana Foundation" };
     return {
-        title: `${post.title} — Fondation Eliana`,
-        description: post.excerpt ?? "Fondation Eliana — cancer pédiatrique en RDC",
+        title: `${post.title} — Eliana Foundation`,
+        description: post.excerpt ?? "Eliana Foundation — cancer pédiatrique en RDC",
         openGraph: { title: post.title, description: post.excerpt ?? undefined, ...(post.cover_url ? { images: [post.cover_url] } : {}) },
     };
 }

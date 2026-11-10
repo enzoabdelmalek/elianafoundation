@@ -2,8 +2,8 @@ import Link from "next/link";
 import { IconArrow, IconButterfly } from "../components/Icons";
 
 export const metadata = {
-    title: "Faire un don — Fondation Eliana",
-    description: "Soutenez la Fondation Eliana dans sa lutte contre le cancer pédiatrique en RDC.",
+    title: "Faire un don — Eliana Foundation",
+    description: "Soutenez Eliana Foundation dans sa lutte contre le cancer pédiatrique en RDC.",
 };
 
 // Adresse « widget » du formulaire de don HelloAsso (HelloAsso > formulaire > Diffusion > Intégrer).
@@ -25,7 +25,7 @@ export default function DonPage() {
                     Ensemble, changeons <em className="accent">des vies</em>
                 </h1>
                 <p className="lead h-anim h-a3" style={{ maxWidth: 620 }}>
-                    Votre soutien permet à la Fondation Eliana de continuer sa mission pour chaque enfant atteint de cancer en RDC.
+                    Votre soutien permet à Eliana Foundation de continuer sa mission pour chaque enfant atteint de cancer en RDC.
                 </p>
             </section>
 
