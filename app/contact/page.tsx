@@ -116,6 +116,9 @@ export default function ContactPage() {
                                 <button type="submit" disabled={loading} className="btn btn-primary" style={{ alignSelf: "flex-start" }}>
                                     {loading ? "Envoi en cours…" : <>Envoyer le message <IconArrow size={16} /></>}
                                 </button>
+                                <p className="muted" style={{ fontSize: 13 }}>
+                                    Vos informations servent uniquement à répondre à votre message. <Link href="/confidentialite" style={{ textDecoration: "underline" }}>En savoir plus sur vos données</Link>
+                                </p>
                             </form>
                         )}
                     </div>

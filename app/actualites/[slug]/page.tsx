@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
         title: `${post.title} — Fondation Eliana`,
         description: post.excerpt ?? "Fondation Eliana — cancer pédiatrique en RDC",
-        openGraph: { title: post.title, description: post.excerpt ?? undefined, images: post.cover_url ? [post.cover_url] : [] },
+        openGraph: { title: post.title, description: post.excerpt ?? undefined, ...(post.cover_url ? { images: [post.cover_url] } : {}) },
     };
 }
 

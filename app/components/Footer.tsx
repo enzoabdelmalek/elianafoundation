@@ -41,7 +41,11 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="muted" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 56, paddingTop: 24, borderTop: "1px solid var(--line)", fontSize: 13 }}>
-                    <span>© {new Date().getFullYear()} Fondation Eliana</span>
+                    <span style={{ display: "flex", flexWrap: "wrap", gap: "4px 16px" }}>
+                        <span>© {new Date().getFullYear()} Fondation Eliana</span>
+                        <Link href="/mentions-legales" className="link-hover">Mentions légales</Link>
+                        <Link href="/confidentialite" className="link-hover">Confidentialité</Link>
+                    </span>
                     <span>Site réalisé par <a href="https://vibewebagency.fr" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>Vibe Web Agency</a></span>
                 </div>
             </div>
